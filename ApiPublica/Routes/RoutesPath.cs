@@ -26,6 +26,8 @@
         #region DispersionController
         public const string DispersionController = "Dispersion";
         public const string DispersionController_PayOut = Base + "/" + DispersionController + "/PayOut/";
+        public const string DispersionController_ListPayOut = Base + "/" + DispersionController + "/ListPayOut/";
+
         //public const string DispersionController_TransaccionesDispersion = Base + "/" + DispersionController + "/TransaccionesDispersion/";
         //public const string DispersionController_DispersionCuenta= Base + "/" + DispersionController + "/DispersionCuenta/";
         //public const string DispersionController_DispersionTerceros = Base + "/" + DispersionController + "/DispersionTerceros/";
