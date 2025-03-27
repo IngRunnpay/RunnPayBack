@@ -26,7 +26,6 @@ namespace ApiPublica.Controllers
             _DispersionServices = dispersionServices;
         }
 
-
         [HttpPost(RoutesPath.DispersionController_PayOut)]
         [TypeFilter(typeof(AllowAnonymousFilter))]
         [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
@@ -127,6 +126,8 @@ namespace ApiPublica.Controllers
             }
             return Ok(response);
         }
-    
+
     }
+    
 }
+
