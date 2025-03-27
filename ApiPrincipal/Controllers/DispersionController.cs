@@ -31,7 +31,7 @@ namespace ApiPrincipal.Controllers
         [HttpPost(RoutesPath.DispersionController_Desicion)]
         [TypeFilter(typeof(AllowAnonymousFilter))]
         [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
-        public async Task<ActionResult> PayOut([FromBody] RequestDecisionDispersion request)
+        public async Task<ActionResult> Desicion([FromBody] RequestDecisionDispersion request)
         {
             BaseResponse response = new BaseResponse();
             try

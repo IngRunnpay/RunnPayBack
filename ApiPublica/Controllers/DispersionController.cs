@@ -104,7 +104,7 @@ namespace ApiPublica.Controllers
         [HttpGet(RoutesPath.DispersionController_DataPayOut)]
         [TypeFilter(typeof(AllowAnonymousFilter))]
         [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
-        public async Task<ActionResult> ListTransaction([FromQuery] int IdDispersion)
+        public async Task<ActionResult> DataPayOut([FromQuery] int IdDispersion)
         {
             BaseResponse response = new BaseResponse();
             try

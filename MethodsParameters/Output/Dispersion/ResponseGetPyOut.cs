@@ -24,5 +24,7 @@ namespace MethodsParameters.Output.Dispersion
         public string NotifyUrl { get; set; }
         public string Estado { get; set; }
         public string IdAplicacion {  get; set; }
+        public int IdEstado { get; set; }
+
     }
 }
