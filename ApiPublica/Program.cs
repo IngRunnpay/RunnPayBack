@@ -21,10 +21,10 @@ namespace ApiPublica
             builder.Services.AddAuthorization();
             builder.Services.CongifureSwagger();
             builder.Services.AddControllers();
-            builder.WebHost.ConfigureKestrel(serverOptions =>
-            {
-                serverOptions.Configure(builder.Configuration.GetSection("Kestrel"));
-            });
+            //builder.WebHost.ConfigureKestrel(serverOptions =>
+            //{
+            //    serverOptions.Configure(builder.Configuration.GetSection("Kestrel"));
+            //});
 
             var app = builder.Build();
             

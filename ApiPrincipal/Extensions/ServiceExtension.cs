@@ -51,6 +51,8 @@ namespace ApiPrincipal.Extensions
             Services.AddScoped<IDashBoardServices, DashBoardServices>();
             Services.AddScoped<IUserPortalServices, UserPortalServices>();
             Services.AddScoped<ITransactionServices, TransactionServices>();
+            Services.AddScoped<IDispersionServices, DispersionServices>();
+
 
             //Repositorios
             Services.AddScoped<ILogRepository, LogRepository>();
@@ -60,6 +62,8 @@ namespace ApiPrincipal.Extensions
             Services.AddScoped<IOtpRepository, OtpRepository>();
             Services.AddScoped<IUserRepository, UserRepository>();
             Services.AddScoped<INoticationRepository, NoticationRepository>();
+            Services.AddScoped<IDispersionRepository, DispersionRepository>();
+
 
             Services.AddResponseCaching();
         }

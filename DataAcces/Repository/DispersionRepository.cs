@@ -128,5 +128,59 @@ namespace DataAccess.Repository
 
             return result;
         }
+        public async Task<int> DesicionDispersion(RequestDecisionDispersion request)
+        {
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[DispersionPayOutDesicion]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdDispersion", request.IdDispersion);
+            parameters.Add("@IdEstado", request.IdEstado);
+
+
+            var result = await _helper.ExecuteStoreProcedureFirstOrDefault<int>(connectionString, storedProcedure, parameters);
+          
+
+            return result;
+        }
+        public async Task<ResponseGetPyOut> GetDispersion(int IdDispersion)
+        {
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Distribucion.Sp_GetInfoDitribucion]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdDistribucion", IdDispersion);
+
+            ResponseGetPyOut result = await _helper.ExecuteStoreProcedureFirstOrDefault<ResponseGetPyOut>(connectionString, storedProcedure, parameters);
+
+
+            return result;
+        }
+
+        public async Task<WebHookPayOut> GetWebHookDispersion(int IdDispersion)
+        {
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Distribucion.Sp_WebHookPayOut]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdDispersion", IdDispersion);
+
+            WebHookPayOut result = await _helper.ExecuteStoreProcedureFirstOrDefault<WebHookPayOut>(connectionString, storedProcedure, parameters);
+
+
+            return result;
+        }
+
+        public async Task<ResponseGetPyOut> GetDispersionXReferencia(string referencia, string IdAplicacion)
+        {
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Distribucion.Sp_GetInfoDitribucionXReferencia]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdReferencia", referencia);
+            parameters.Add("@IdAplicacion", IdAplicacion);
+
+
+            ResponseGetPyOut result = await _helper.ExecuteStoreProcedureFirstOrDefault<ResponseGetPyOut>(connectionString, storedProcedure, parameters);
+
+
+            return result;
+        }
     }
 }

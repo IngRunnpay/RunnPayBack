@@ -16,7 +16,10 @@ namespace Interfaces.DataAccess.Repository
         Task<responseSpDataCuenta> DataCuenta(string request);
         Task<object> ValidarTransaccionesLiquidadas(List<DataDispersion> request);
         Task<int> CreateDispersion(CrearDispersion request);
-
+        Task<int> DesicionDispersion(RequestDecisionDispersion request);
+        Task<ResponseGetPyOut> GetDispersion(int IdDispersion);
+        Task<WebHookPayOut> GetWebHookDispersion(int IdDispersion);
+        Task<ResponseGetPyOut> GetDispersionXReferencia(string referencia, string IdAplicacion);
 
     }
 }

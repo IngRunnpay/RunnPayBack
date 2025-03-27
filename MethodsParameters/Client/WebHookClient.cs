@@ -13,7 +13,7 @@ namespace MethodsParameters.Client
 {
     public static class WebHookClient
     {
-        public static object SendClientWebhook(string urlClient, RequesWebHook ObjRequest)
+        public static object SendClientWebhook(string urlClient, object ObjRequest)
         {
             object response = new object();
             try

@@ -41,5 +41,9 @@
         public const string ReportsController = "Reports";
         public const string ReportsController_Transactions = Base + "/" + ReportsController + "/Transactions/";
         #endregion
+        #region DispersionController
+        public const string DispersionController = "Dispersion";
+        public const string DispersionController_Desicion = Base + "/" + DispersionController + "/Desicion/";
+        #endregion
     }
 }

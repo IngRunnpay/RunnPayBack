@@ -14,6 +14,9 @@ namespace Interfaces.Bussines
         Task<BaseResponse> TransaccionesDispersion(string request);
         Task<BaseResponse> DispersionCuenta(List<DataDispersion> request, string IdAplicacion);
         Task<BaseResponse> DispersionTerceros(RequestDispersion request, string IdAplicacion);
+        Task<BaseResponse> DesicionDispersion(RequestDecisionDispersion request);
+        Task<BaseResponse> DataDispersion(string IdAplicacion, int idDispersion);
+
 
     }
 }

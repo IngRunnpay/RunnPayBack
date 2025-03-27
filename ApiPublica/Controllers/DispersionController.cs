@@ -101,108 +101,32 @@ namespace ApiPublica.Controllers
             }
             return Ok(response);
         }
-        //    [HttpGet(RoutesPath.DispersionController_TransaccionesDispersion)]
-        //    [TypeFilter(typeof(AllowAnonymousFilter))]
-        //    [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
-        //    public async Task<ActionResult> ListTransaction()
-        //    {
-        //        BaseResponse response = new BaseResponse();
-        //        try
-        //        {
-        //            ValidateAccess(RoutesPath.DispersionController_TransaccionesDispersion, new { });
 
-        //            var IdAplicacion = IdUsuario;
+        [HttpGet(RoutesPath.DispersionController_DataPayOut)]
+        [TypeFilter(typeof(AllowAnonymousFilter))]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
+        public async Task<ActionResult> ListTransaction([FromQuery] int IdDispersion)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                ValidateAccess(RoutesPath.DispersionController_DataPayOut, new { });
 
-        //            response = await _DispersionServices.TransaccionesDispersion(IdAplicacion);
-        //        }
-        //        catch (CustomException ex)
-        //        {
-        //            response.CreateError(ex);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            await LogError(ex);
-        //            response.CreateError(ex);
-        //        }
-        //        return Ok(response);
-        //    }
-        //    [HttpPost(RoutesPath.DispersionController_DispersionCuenta)]
-        //    [TypeFilter(typeof(AllowAnonymousFilter))]
-        //    [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
-        //    public async Task<ActionResult> DispersionCuenta([FromBody]List<DataDispersion> Request)
-        //    {
-        //        BaseResponse response = new BaseResponse();
-        //        try
-        //        {
-        //            if (Request.Count <= 0)
-        //            {
-        //                throw new CustomException($"Ingresa lista de transacciones.");
-        //            }
-        //            ValidateAccess(RoutesPath.DispersionController_DispersionCuenta, new { });
+                var IdAplicacion = IdUsuario;
 
-        //            var IdAplicacion = IdUsuario;
-
-        //            response = await _DispersionServices.DispersionCuenta(Request, IdAplicacion);
-        //        }
-        //        catch (CustomException ex)
-        //        {
-        //            response.CreateError(ex);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            await LogError(ex);
-        //            response.CreateError(ex);
-        //        }
-        //        return Ok(response);
-        //    }
-        //    [HttpPost(RoutesPath.DispersionController_DispersionTerceros)]
-        //    [TypeFilter(typeof(AllowAnonymousFilter))]
-        //    [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
-        //    public async Task<ActionResult> DispersionTerceros([FromBody] RequestDispersion Request)
-        //    {
-        //        BaseResponse response = new BaseResponse();
-        //        try
-        //        {
-        //            if (Request.Data.Count <= 0)
-        //            {
-        //                throw new CustomException($"Ingresa lista de transacciones.");
-        //            }
-        //            if (Request.TipoDocumento <= 0)
-        //            {
-        //                throw new CustomException("Campo no valido [TipoDocumento]");
-        //            }
-        //            if (Request.TipoCuenta <= 0)
-        //            {
-        //                throw new CustomException("Campo no valido [TipoCuenta]");
-        //            }
-        //            if (string.IsNullOrEmpty(Request.NumeroDocumento))
-        //            {
-        //                throw new CustomException("Campo no valido [NumeroDocumento]");
-        //            }
-        //            if (string.IsNullOrEmpty(Request.Banco))
-        //            {
-        //                throw new CustomException("Campo no valido [Banco]");
-        //            }
-        //            if (string.IsNullOrEmpty(Request.NumeroCuenta))
-        //            {
-        //                throw new CustomException("Campo no valido [NumeroCuenta]");
-        //            }
-        //            ValidateAccess(RoutesPath.DispersionController_DispersionTerceros, new { });
-
-        //            var IdAplicacion = IdUsuario;
-
-        //            response = await _DispersionServices.DispersionTerceros(Request, IdAplicacion);
-        //        }
-        //        catch (CustomException ex)
-        //        {
-        //            response.CreateError(ex);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            await LogError(ex);
-        //            response.CreateError(ex);
-        //        }
-        //        return Ok(response);
-        //    }
+                response = await _DispersionServices.DataDispersion(IdAplicacion, IdDispersion);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await LogError(ex);
+                response.CreateError(ex);
+            }
+            return Ok(response);
+        }
+    
     }
 }
