@@ -11,6 +11,6 @@ namespace MethodsParameters.Output.Dispersion
         public int IdBalance { get; set; }
         public decimal? MontoRetirado { get; set; }
         public decimal? montoDisponible {  get; set; }
-        public decimal? MontoRetenido {  get; set; }
+        public decimal? PendienteDispersion {  get; set; }
     }
 }

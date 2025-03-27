@@ -172,6 +172,7 @@ namespace Bussines
             try
             {
                 response.Data = await _iTransactionRepository.Balance(request);
+                response.CreateSuccess("Ok", response.Data);
             }
             catch (CustomException ex)
             {
