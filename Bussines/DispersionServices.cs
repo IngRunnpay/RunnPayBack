@@ -214,31 +214,37 @@ namespace Bussines
                     ResponseGetPyOut ObjDataPayOut = await _DispersionRepository.GetDispersion(request.IdDispersion);
                     if (ObjDataPayOut != null && ObjDataPayOut.IdDispersion > 0)
                     {
-                        int reps = await _DispersionRepository.DesicionDispersion(request);
-                        if (reps > 0)
+                        if (ObjDataPayOut.IdEstado == (int)enumEstadoPayOut.PorDispersar)
                         {
-                            if (!string.IsNullOrEmpty(ObjDataPayOut.NotifyUrl))
+                            int reps = await _DispersionRepository.DesicionDispersion(request);
+                            if (reps > 0)
                             {
-                                WebHookPayOut responseWeb = await _DispersionRepository.GetWebHookDispersion(request.IdDispersion);
-                                object objResponse = new
+                                if (!string.IsNullOrEmpty(ObjDataPayOut.NotifyUrl))
                                 {
-                                    IdDispersion = OperacionEncriptacion.EncryptString(responseWeb.IdDispersion.ToString(), responseWeb.UserName, responseWeb.Aplicacion),
-                                    DescripcionEstado = OperacionEncriptacion.EncryptString(responseWeb.DescripcionEstado.ToString(), responseWeb.UserName, responseWeb.Aplicacion),
-                                    Mensaje = OperacionEncriptacion.EncryptString(responseWeb.Mensaje.ToString(), responseWeb.UserName, responseWeb.Aplicacion),
-                                    idEstado = OperacionEncriptacion.EncryptString(responseWeb.idEstado.ToString(), responseWeb.UserName, responseWeb.Aplicacion)
-                                };
-                                WebHookClient.SendClientWebhook(ObjDataPayOut.NotifyUrl, objResponse);
+                                    WebHookPayOut responseWeb = await _DispersionRepository.GetWebHookDispersion(request.IdDispersion);
+                                    object objResponse = new
+                                    {
+                                        IdDispersion = OperacionEncriptacion.EncryptString(responseWeb.IdDispersion.ToString(), responseWeb.UserName, responseWeb.Aplicacion),
+                                        DescripcionEstado = OperacionEncriptacion.EncryptString(responseWeb.DescripcionEstado.ToString(), responseWeb.UserName, responseWeb.Aplicacion),
+                                        Mensaje = OperacionEncriptacion.EncryptString(responseWeb.Mensaje.ToString(), responseWeb.UserName, responseWeb.Aplicacion),
+                                        idEstado = OperacionEncriptacion.EncryptString(responseWeb.idEstado.ToString(), responseWeb.UserName, responseWeb.Aplicacion)
+                                    };
+                                    WebHookClient.SendClientWebhook(ObjDataPayOut.NotifyUrl, objResponse);
+
+                                }
+                                response.CreateSuccess("Desicion realizada correctamente.", reps);
 
                             }
-                            response.CreateSuccess("Desicion realizada correctamente.", reps);
+                            else
+                            {
+                                response.CreateError("No se logro gestionar la solicitud, intenta nuevamente.");
 
+                            }
                         }
                         else
                         {
-                            response.CreateError("No se logro gestionar la solicitud, intenta nuevamente.");
-
+                            response.CreateError("No se puede realizar la gestion ya que el PayOut ya fue rechazado o aprobado.");
                         }
-
                     }
                     else
                     {
@@ -287,6 +293,26 @@ namespace Bussines
                     response.CreateError("No se encuentra el id de la dispersión.");
 
                 }
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse> BilleteraCliente(string IdAplicacion)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                ReponseBalance balance = await _TransactionRepository.Balance(IdAplicacion);
+                response.CreateSuccess("Ok", balance);
             }
             catch (CustomException ex)
             {

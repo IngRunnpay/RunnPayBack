@@ -139,5 +139,28 @@ namespace ApiPrincipal.Controllers
             }
             return Ok(response);
         }
+        [HttpGet(RoutesPath.GatewayController_GetMetodPagoXUsuario)]
+        [TypeFilter(typeof(AllowAnonymousFilter))]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
+        public async Task<ActionResult> GetMetodPagoXUsuario([FromQuery] string IdTransaccion)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                ValidateAccess(RoutesPath.GatewayController_ResumePay, new { });
+                response = await _GatewayServices.GetMetodPagoXUsuario(IdTransaccion);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await LogError(ex);
+                response.CreateError(ex);
+            }
+            return Ok(response);
+        }
+
     }
 }

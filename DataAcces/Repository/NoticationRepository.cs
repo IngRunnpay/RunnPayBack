@@ -40,13 +40,13 @@ namespace DataAccess.Repository
             _RunPayDbContext = runPayDbContext;
             _logRepository = logRepository;
 
-            string accessKey = _configuration.GetSection("AWS:AccessKey").Value;
-            string secretKey = _configuration.GetSection("AWS:SecretKey").Value;
-            string region = _configuration.GetSection("AWS:Region").Value;
-            _senderEmail = _configuration.GetSection("AWS:SenderEmail").Value;
+            //string accessKey = _configuration.GetSection("AWS:AccessKey").Value;
+            //string secretKey = _configuration.GetSection("AWS:SecretKey").Value;
+            //string region = _configuration.GetSection("AWS:Region").Value;
+            //_senderEmail = _configuration.GetSection("AWS:SenderEmail").Value;
 
-            var awsRegion = RegionEndpoint.GetBySystemName(region);
-            _amazonSesClient = new AmazonSimpleEmailServiceClient(accessKey, secretKey, awsRegion);
+            //var awsRegion = RegionEndpoint.GetBySystemName(region);
+            //_amazonSesClient = new AmazonSimpleEmailServiceClient(accessKey, secretKey, awsRegion);
         }
 
         public async Task<BaseResponse> SendEmailOtp(NotificationOTp Request)

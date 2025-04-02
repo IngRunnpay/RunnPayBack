@@ -58,7 +58,7 @@ namespace Bussines
                     NotificationOTp Send = new NotificationOTp();
                     Send.Otp = otp;
                     Send.Destinatario = User.Correo;
-                    var responseEmail = await _notificationRepository.SendEmailOtp(Send);
+                    //var responseEmail = await _notificationRepository.SendEmailOtp(Send);
                     if (true)
                     {
                         response.Success = true;
@@ -98,7 +98,9 @@ namespace Bussines
                     {
                         Idusuario = User.IdUsuario,
                         Nombre = $"{User.Nombre} {User.Apellido}",
-                        Cod = User.IdAplicacion
+                        Cod = User.IdAplicacion,
+                        PT = User.NombrePT,
+                        Nit = User.NIT                    
                     };
                     response.CreateSuccess("código validado correctamente.", Resp);
                 }

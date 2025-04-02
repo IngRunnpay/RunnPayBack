@@ -51,6 +51,30 @@ namespace ApiPrincipal.Controllers
             }
             return Ok(response);
         }
-        
+
+        [HttpGet(RoutesPath.DispersionController_BilleteraCliente)]
+        [TypeFilter(typeof(AllowAnonymousFilter))]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
+        public async Task<ActionResult> BilleteraCliente([FromQuery]string IdAplicacion)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                ValidateAccess(RoutesPath.DispersionController_BilleteraCliente, new { });
+
+                response = await _DispersionServices.BilleteraCliente(IdAplicacion);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await LogError(ex);
+                response.CreateError(ex);
+            }
+            return Ok(response);
+        }
+
     }
 }

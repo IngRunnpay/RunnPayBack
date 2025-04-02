@@ -265,5 +265,26 @@ namespace Bussines
             }
             return response;
         }
+        public async Task<BaseResponse> GetMetodPagoXUsuario(string IdTransaccion)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                string Token = OperacionEncriptacion.DecryptAES(HttpUtility.UrlDecode(IdTransaccion.UrlErrorCharacteresEncode(true)), Utilities.OperacionEncriptacion.Keys.UserAgreementKEY, Utilities.OperacionEncriptacion.Keys.UserAgreementIV);
+
+                response = await _TransactionRepository.GetMetodPagoXUsuario(Convert.ToInt32(Token));
+                response.CreateSuccess("OK", response.Data);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+            return response;
+        }
     }
 }

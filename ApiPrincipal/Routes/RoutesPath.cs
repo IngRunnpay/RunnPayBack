@@ -22,6 +22,8 @@
         public const string GatewayController_GatewayCreated = Base + "/" + GatewayController + "/GatewayCreated/";
         public const string GatewayController_GatewayGetDataTransaction = Base + "/" + GatewayController + "/GatewayGetDataTransaction/";
         public const string GatewayController_ResumePay = Base + "/" + GatewayController + "/ResumePay/";
+        public const string GatewayController_GetMetodPagoXUsuario = Base + "/" + GatewayController + "/GetMetodPagoXUsuario/";
+
         #endregion
 
         #region DashboardController
@@ -44,6 +46,8 @@
         #region DispersionController
         public const string DispersionController = "Dispersion";
         public const string DispersionController_Desicion = Base + "/" + DispersionController + "/Desicion/";
+        public const string DispersionController_BilleteraCliente = Base + "/" + DispersionController + "/BilleteraCliente/";
+
         #endregion
     }
 }

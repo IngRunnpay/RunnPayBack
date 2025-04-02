@@ -198,6 +198,13 @@ namespace DataAccess.Repository
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@IdUsuario", request.IdUsuario);
             parameters.Add("@IdAplicacion", request.IdAplicacion);
+            parameters.Add("@Ini", request.Ini);
+            parameters.Add("@Fin", request.Fin);
+            parameters.Add("@IdTransaccion", request.IdTransaccion > 0 ? request.IdTransaccion : null);
+            parameters.Add("@Referencia", string.IsNullOrEmpty(request.Referencia) ? null : request.Referencia);
+            parameters.Add("@Documento", string.IsNullOrEmpty(request.Documento) ? null : request.Documento);
+            parameters.Add("@FechaInicio", string.IsNullOrEmpty(request.FechaInicio) ? null : request.FechaInicio);
+            parameters.Add("@FechaFin", string.IsNullOrEmpty(request.FechaFin) ? null : request.FechaFin);
 
             var result = await _helper.ExecuteStoreProcedureGet<object>(connectionString, storedProcedure, parameters);
             var response = new BaseResponse();
@@ -216,6 +223,20 @@ namespace DataAccess.Repository
            
 
             return result;
+        }
+
+        public async Task<BaseResponse> GetMetodPagoXUsuario(int IdTransaccion)
+        {
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Transaccion.Sp_GetMetodoPago]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdTransaccion", IdTransaccion);
+
+            var result = await _helper.ExecuteStoreProcedureGet<object>(connectionString, storedProcedure, parameters);
+            var response = new BaseResponse();
+            response.CreateSuccess("Ok", result);
+
+            return response;
         }
     }
 }

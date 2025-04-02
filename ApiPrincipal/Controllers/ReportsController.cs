@@ -41,7 +41,17 @@ namespace ApiPrincipal.Controllers
                     throw new CustomException("Campo no valido [IdUsuario]");
 
                 }
-                //ValidateAccess(RoutesPath.ReportsController_Transactions, new { });
+                if (request.Ini <= 0)
+                {
+                    throw new CustomException("Campo no valido [Ini]");
+
+                }
+                if (request.Fin <= 0)
+                {
+                    throw new CustomException("Campo no valido [Fin]");
+
+                }
+                ValidateAccess(RoutesPath.ReportsController_Transactions, new { });
                 response = await _TransactionServices.Resporttransaction(request);
             }
             catch (CustomException ex)

@@ -25,8 +25,9 @@ namespace Interfaces.DataAccess.Repository
         Task<BaseResponse> GetBancosPSE();
         Task<ResponseSpDataWebHook> GetDataWebHook(int IdTransaccion);
         Task<BaseResponse> Estadotransaccion(SpGetHistoriTransaction Request); 
-        Task<BaseResponse> Resporttransaction(RequestSpTransactions request);
+        Task<BaseResponse> Resporttransaction(RequestSpTransactions request); 
         Task<ReponseBalance> Balance(string request);
+        Task<BaseResponse> GetMetodPagoXUsuario(int IdTransaccion);
 
     }
 }

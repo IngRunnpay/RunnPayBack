@@ -21,5 +21,8 @@ namespace MethodsParameters.Output.PortalUser
         public string Celular {  get; set; }
         public string Correo { get; set; }
         public Guid IdAplicacion { get; set; }
+        public string NombrePT { get; set; }
+        public string NIT { get; set; }
+
     }
 }
