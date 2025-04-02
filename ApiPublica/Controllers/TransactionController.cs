@@ -37,9 +37,15 @@ namespace ApiPublica.Controllers
             try
             {
                 var montoMinimo = _configuration.GetSection("MontoMinimo").Value;
+                var montoMaximo = _configuration.GetSection("MontoMaximo").Value;
+
                 if (Request.Monto < Convert.ToDecimal(montoMinimo))
                 {
                     throw new CustomException($"El monto minimo es de {montoMinimo}.");
+                }
+                if (Request.Monto > Convert.ToDecimal(montoMaximo))
+                {
+                    throw new CustomException($"El monto maximo es de {montoMaximo}.");
                 }
                 if (Request.Monto <= 0)
                 {

@@ -38,39 +38,58 @@ namespace Bussines
             BaseResponse response = new BaseResponse();
             try
             {
-                ResponseGetPyOut ObjExiste = await _DispersionRepository.GetDispersionXReferencia(request.Referencia, request.IdAplicacion);
-                if (ObjExiste != null && ObjExiste.IdDispersion > 0)
+                ReponseGetClientConfig ReponseConfig = await _DispersionRepository.GetConfigClient(request.IdAplicacion);
+                if (ReponseConfig == null )
                 {
-                    response.CreateError("La referencia ingresada ya existe.");
+                    response.CreateError("El comercio no se encuentra registrado correctamente");
                 }
                 else
                 {
                     ReponseBalance balance = await _TransactionRepository.Balance(request.IdAplicacion);
-                    if (balance.IdBalance > 0)
+
+                    decimal Banco = (_configuration.GetSection("nequiPayOut").Value == request.Banco) ? ReponseConfig.PayOutNequi : ReponseConfig.PayOut;
+                    decimal Cobro = (Banco + ((4 * request.Monto)/1000) + (Banco * (19/100)));
+                    if (balance.montoDisponible < (request.Monto + Cobro))
                     {
-                        if (balance.montoDisponible > request.Monto)
+                        response.CreateError("El monto disponible es menor al requerido para esta gestion.");
+                    }
+                    else
+                    {
+                        ResponseGetPyOut ObjExiste = await _DispersionRepository.GetDispersionXReferencia(request.Referencia, request.IdAplicacion);
+                        if (ObjExiste != null && ObjExiste.IdDispersion > 0)
                         {
-                            response = await _DispersionRepository.PayOutSaldo(request);
-                            if (response.Success)
+                            response.CreateError("La referencia ingresada ya existe.");
+                        }
+                        else
+                        {
+                            if (balance.IdBalance > 0)
                             {
-                                response.CreateSuccess("Ok", response.Data);
+                                if (balance.montoDisponible > request.Monto)
+                                {
+                                    response = await _DispersionRepository.PayOutSaldo(request);
+                                    if (response.Success)
+                                    {
+                                        response.CreateSuccess("Ok", response.Data);
+                                    }
+                                    else
+                                    {
+                                        response.CreateError("No logramos realizar tu solicitud, intenta nuevamente.");
+                                    }
+                                }
+                                else
+                                {
+                                    response.CreateError("El monto solicitado es mayor al disponible.");
+
+                                }
                             }
                             else
                             {
                                 response.CreateError("No logramos realizar tu solicitud, intenta nuevamente.");
                             }
                         }
-                        else
-                        {
-                            response.CreateError("El monto solicitado es mayor al disponible.");
-
-                        }
-                    }
-                    else
-                    {
-                        response.CreateError("No logramos realizar tu solicitud, intenta nuevamente.");
-                    }
-                }             
+                    }                   
+                }
+                       
             }
             catch (CustomException ex)
             {

@@ -5,6 +5,7 @@ using Interfaces.DataAccess.Repository;
 using Interfaces.DataAccess.Utilities;
 using MethodsParameters.Input.Dispersion;
 using MethodsParameters.Output.Dispersion;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -182,5 +183,20 @@ namespace DataAccess.Repository
 
             return result;
         }
+
+        public async Task<ReponseGetClientConfig> GetConfigClient(string IdAplicacion) 
+        {
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Seguridad.Sp_DataConfigClient]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdAplicacion", IdAplicacion);
+
+
+            ReponseGetClientConfig result = await _helper.ExecuteStoreProcedureFirstOrDefault<ReponseGetClientConfig>(connectionString, storedProcedure, parameters);
+
+
+            return result;
+        }
+
     }
 }

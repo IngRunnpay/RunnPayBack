@@ -34,6 +34,17 @@ namespace ApiPublica.Controllers
             BaseResponse response = new BaseResponse();
             try
             {
+                var montoMinimo = _configuration.GetSection("MontoMinimoPayOut").Value;
+                var montoMaximo = _configuration.GetSection("MontoMaximoPayOut").Value;
+
+                if (request.Monto < Convert.ToDecimal(montoMinimo))
+                {
+                    throw new CustomException($"El monto minimo es de {montoMinimo}.");
+                }
+                if (request.Monto > Convert.ToDecimal(montoMaximo))
+                {
+                    throw new CustomException($"El monto maximo es de {montoMaximo}.");
+                }
                 if (request.TipoDocumento <= 0)
                 {
                     throw new CustomException("Campo no valido [TipoDocumento]");

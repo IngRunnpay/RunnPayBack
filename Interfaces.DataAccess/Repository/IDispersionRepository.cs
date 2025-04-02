@@ -20,6 +20,7 @@ namespace Interfaces.DataAccess.Repository
         Task<ResponseGetPyOut> GetDispersion(int IdDispersion);
         Task<WebHookPayOut> GetWebHookDispersion(int IdDispersion);
         Task<ResponseGetPyOut> GetDispersionXReferencia(string referencia, string IdAplicacion);
+        Task<ReponseGetClientConfig> GetConfigClient(string IdAplicacion);
 
     }
 }
