@@ -1,5 +1,6 @@
 ﻿using Entities.General;
 using MethodsParameters.Input.Dispersion;
+using MethodsParameters.Input.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,6 @@ namespace Interfaces.Bussines
         Task<BaseResponse> DesicionDispersion(RequestDecisionDispersion request);
         Task<BaseResponse> DataDispersion(string IdAplicacion, int idDispersion);
         Task<BaseResponse> BilleteraCliente(string IdAplicacion);
-
+        Task<BaseResponse> Dispersion(RequestSpDispersion request);
     }
 }

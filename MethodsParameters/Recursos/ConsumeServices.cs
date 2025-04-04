@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Azure.Core;
+using Newtonsoft.Json.Linq;
 
 namespace ECD.Utilidades.Recursos
 {
@@ -68,10 +69,18 @@ namespace ECD.Utilidades.Recursos
             CreateNewInstanClient();
             if (!string.IsNullOrEmpty(token))
             {
-                if (string.IsNullOrEmpty(channel))
+                string encodedUser = "";
+                switch (channel)
                 {
-                    string encodedUser = Convert.ToBase64String(Encoding.UTF8.GetBytes(token));
-                    Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encodedUser);
+                    case "Tpaga":
+                        encodedUser = Convert.ToBase64String(Encoding.UTF8.GetBytes(token));
+                        Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encodedUser);
+
+                        break;
+                    case "BePay":
+                        Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                        break;
                 }
             }
 
@@ -80,6 +89,7 @@ namespace ECD.Utilidades.Recursos
 
             using (var stringContent = new StringContent(jsonRequest.ToString(), Encoding.UTF8, "application/json"))
             {
+
                 var response = Client.PostAsync(Client.BaseAddress, stringContent).Result;
                 if (!response.IsSuccessStatusCode)
                 {
@@ -90,7 +100,7 @@ namespace ECD.Utilidades.Recursos
                 return JsonConvert.DeserializeObject<T>(responseString);
             }
         }
-        public async Task<T> GetAsync<T>(string url, object request, string accessToken = null)
+        public async Task<T> GetAsync<T>(string url, object request, string accessToken = null, string channel = null)
         {
             try
             {
@@ -98,8 +108,20 @@ namespace ECD.Utilidades.Recursos
 
                 if (!string.IsNullOrEmpty(accessToken))
                 {
-                    string encodedUser = Convert.ToBase64String(Encoding.UTF8.GetBytes(accessToken));
-                    Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encodedUser);
+                    string encodedUser = "";
+                    switch (channel)
+                    {
+                        case "Tpaga":
+                            encodedUser = Convert.ToBase64String(Encoding.UTF8.GetBytes(accessToken));
+                            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encodedUser);
+
+                            break;
+                        case "BePay":
+                            encodedUser = Convert.ToBase64String(Encoding.UTF8.GetBytes(accessToken));
+                            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", encodedUser);
+
+                            break;
+                    }
                 }
 
                 Client.BaseAddress = new Uri(url);
@@ -133,6 +155,7 @@ namespace ECD.Utilidades.Recursos
             Client = new HttpClient(clientHandler);
             Client.DefaultRequestHeaders.Accept.Clear();
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
             Client.DefaultRequestHeaders.CacheControl = CacheControlHeaderValue.Parse("no-cache");
         }
     }

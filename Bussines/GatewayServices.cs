@@ -22,6 +22,7 @@ using MethodsParameters.Output.Transaccion;
 using System.Web;
 using MethodsParameters.Client;
 using MethodsParameters.Input.Webhook;
+using MethodsParameters.Input.Client.BPay;
 
 namespace Bussines
 {
@@ -59,7 +60,8 @@ namespace Bussines
                     var resp = TpagaClient.GetInfoTransaccion(ObjRequest.charge_token);
                     if (resp != null)
                     {
-                        int EstadoAnterior = ResponseSpLog.IdEstadoTransaccion;
+                        //int EstadoAnterior = ResponseSpLog.IdEstadoTransaccion;
+                        int EstadoAnterior = 1;
                         if (EstadoAnterior == (int)enumEstadoTransaccion.Pendiente || EstadoAnterior == (int)enumEstadoTransaccion.PendientePSE)
                         {
                             ActualizarEstadoTransaccion ActualizarEstado = new ActualizarEstadoTransaccion();
@@ -274,6 +276,85 @@ namespace Bussines
 
                 response = await _TransactionRepository.GetMetodPagoXUsuario(Convert.ToInt32(Token));
                 response.CreateSuccess("OK", response.Data);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse> GatewayNequiPush(RequestCreatedNequiPush ObjRequest, string Endpoint)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                string IdTransaccion = OperacionEncriptacion.DecryptAES(HttpUtility.UrlDecode(ObjRequest.IdTransaccion.UrlErrorCharacteresEncode(true)), Utilities.OperacionEncriptacion.Keys.UserAgreementKEY, Utilities.OperacionEncriptacion.Keys.UserAgreementIV);
+                ResponseSp_GetDataTransaccion ResponseTransaction = await _TransactionRepository.DataTransaction(Convert.ToInt32(IdTransaccion));
+                string BaseRuta = _configuration.GetSection("RuteResume").Value;
+                if (ResponseTransaction != null)
+                {
+                    RequestNequiPush Nequi = new RequestNequiPush();
+                    RequestCreateTransaction Transaction = new RequestCreateTransaction();
+
+                    Transaction.reference = ResponseTransaction.Referencia;
+                    Transaction.total = ResponseTransaction.MontoFinal.ToString().Replace(",", ".");
+                    Transaction.description = ResponseTransaction.DescripcionCompra;
+                    Transaction.redirect_url = Nequi.redirect_url = (string.IsNullOrEmpty(ResponseTransaction.UrlClient)) ? $"{BaseRuta}{ObjRequest.IdTransaccion}" : ResponseTransaction.UrlClient;
+
+                    Nequi.email = ResponseTransaction.UsuCorreo;
+                    Nequi.nombres = ResponseTransaction.UsuNombre;
+                    Nequi.numero_documento = ResponseTransaction.UsuDocumento;
+                    Nequi.telefono = Nequi.nequi_push_phone = ResponseTransaction.UsuTelefono;
+
+                    switch (ResponseTransaction.Documento)
+                    {
+                        case "CC":
+                            Nequi.tipo_documento = 2;
+                            break;
+                        case "CE":
+                            Nequi.tipo_documento = 3;
+                            break;
+                        case "NIT":
+                            Nequi.tipo_documento = 1;
+                            break;
+                        case "TI":
+                            Nequi.tipo_documento = 5;
+                            break;
+                        case "PP":
+                            Nequi.tipo_documento = 4;
+                            break;
+                    }
+
+                    var resp = BPayClient.NequiPush(Nequi, Transaction);
+
+                    SpLogPasarelaExterna ObjSpRequest = new SpLogPasarelaExterna();
+                    ObjSpRequest.IdTransaccion = Convert.ToInt32(IdTransaccion);
+                    ObjSpRequest.Endpoint = Endpoint;
+                    ObjSpRequest.Request = JsonSerializer.Serialize(ObjRequest);
+                    ObjSpRequest.Response = JsonSerializer.Serialize(resp);
+                    ObjSpRequest.Enviada = true;
+                    await _logRepository.LoggExternalPasarela(ObjSpRequest);
+
+                    if (resp.success)
+                    {
+                        var update = await _TransactionRepository.UpdateNequiPush(Convert.ToInt32(IdTransaccion));
+                        response.CreateSuccess("Ok", resp.data);
+                    }
+                    else
+                    {
+                        response.CreateError((resp.message != null) ? resp.message : "Error al generar nequiPush.");
+                    }
+                }
+                else
+                {
+                    response.CreateError("No se encuentra informacion de la transaccion indicada.");
+                }
             }
             catch (CustomException ex)
             {

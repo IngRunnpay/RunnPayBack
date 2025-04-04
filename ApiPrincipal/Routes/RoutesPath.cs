@@ -23,6 +23,7 @@
         public const string GatewayController_GatewayGetDataTransaction = Base + "/" + GatewayController + "/GatewayGetDataTransaction/";
         public const string GatewayController_ResumePay = Base + "/" + GatewayController + "/ResumePay/";
         public const string GatewayController_GetMetodPagoXUsuario = Base + "/" + GatewayController + "/GetMetodPagoXUsuario/";
+        public const string GatewayController_GatewayNequiPush = Base + "/" + GatewayController + "/NequiPush/";
 
         #endregion
 
@@ -42,6 +43,8 @@
         #region ReportsController
         public const string ReportsController = "Reports";
         public const string ReportsController_Transactions = Base + "/" + ReportsController + "/Transactions/";
+        public const string ReportsController_Dispersion = Base + "/" + ReportsController + "/Dispersion/";
+
         #endregion
         #region DispersionController
         public const string DispersionController = "Dispersion";

@@ -1,5 +1,6 @@
 ﻿using Entities.General;
 using MethodsParameters.Input.Dispersion;
+using MethodsParameters.Input.Reports;
 using MethodsParameters.Output.Dispersion;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace Interfaces.DataAccess.Repository
         Task<WebHookPayOut> GetWebHookDispersion(int IdDispersion);
         Task<ResponseGetPyOut> GetDispersionXReferencia(string referencia, string IdAplicacion);
         Task<ReponseGetClientConfig> GetConfigClient(string IdAplicacion);
+        Task<BaseResponse> Dispersion(RequestSpDispersion request);
 
     }
 }

@@ -18,6 +18,7 @@ namespace Interfaces.Bussines
         Task<BaseResponse> GatewayGetDataTransaction(string IdTransaccion); 
         Task<BaseResponse> GatewayController_ResumePay(string IdTransaccion);
         Task<BaseResponse> GetMetodPagoXUsuario(string IdTransaccion);
+        Task<BaseResponse> GatewayNequiPush(RequestCreatedNequiPush ObjRequest, string Endpoint);
 
     }
 }

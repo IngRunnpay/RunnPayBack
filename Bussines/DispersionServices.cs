@@ -5,6 +5,7 @@ using Interfaces.DataAccess.Repository;
 using MethodsParameters.Client;
 using MethodsParameters.Input;
 using MethodsParameters.Input.Dispersion;
+using MethodsParameters.Input.Reports;
 using MethodsParameters.Input.Webhook;
 using MethodsParameters.Output.Dispersion;
 using Microsoft.Extensions.Configuration;
@@ -332,6 +333,24 @@ namespace Bussines
             {
                 ReponseBalance balance = await _TransactionRepository.Balance(IdAplicacion);
                 response.CreateSuccess("Ok", balance);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+            return response;
+        }
+        public async Task<BaseResponse> Dispersion(RequestSpDispersion request)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                response = await _DispersionRepository.Dispersion(request);
             }
             catch (CustomException ex)
             {

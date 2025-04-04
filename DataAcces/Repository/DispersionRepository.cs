@@ -4,6 +4,7 @@ using Entities.General;
 using Interfaces.DataAccess.Repository;
 using Interfaces.DataAccess.Utilities;
 using MethodsParameters.Input.Dispersion;
+using MethodsParameters.Input.Reports;
 using MethodsParameters.Output.Dispersion;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
@@ -196,6 +197,26 @@ namespace DataAccess.Repository
 
 
             return result;
+        }
+
+        public async Task<BaseResponse> Dispersion(RequestSpDispersion request) {
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[DispersionSaldo.Sp_Reporte]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdAplicacion", request.IdAplicacion);
+            parameters.Add("@Ini", request.Ini);
+            parameters.Add("@Fin", request.Fin);
+            parameters.Add("@IdDispersion", request.IdDispersion > 0 ? request.IdDispersion : null);
+            parameters.Add("@Referencia", string.IsNullOrEmpty(request.Referencia) ? null : request.Referencia);
+            parameters.Add("@Documento", string.IsNullOrEmpty(request.Documento) ? null : request.Documento);
+            parameters.Add("@FechaInicio", string.IsNullOrEmpty(request.FechaInicio) ? null : request.FechaInicio);
+            parameters.Add("@FechaFin", string.IsNullOrEmpty(request.FechaFin) ? null : request.FechaFin);
+
+            var result = await _helper.ExecuteStoreProcedureGet<object>(connectionString, storedProcedure, parameters);
+            var response = new BaseResponse();
+            response.CreateSuccess("Ok", result);
+
+            return response;
         }
 
     }

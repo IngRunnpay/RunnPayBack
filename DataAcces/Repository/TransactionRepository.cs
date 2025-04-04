@@ -238,5 +238,19 @@ namespace DataAccess.Repository
 
             return response;
         }
+
+        public async Task<BaseResponse> UpdateNequiPush(int IdTransaccion)
+        {
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Transaccion.Sp_UpdateNequiPush]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdTransaccion", IdTransaccion);
+
+            var result = await _helper.ExecuteStoreProcedureFirstOrDefault<object>(connectionString, storedProcedure, parameters);
+            var response = new BaseResponse();
+            response.CreateSuccess("Ok", result);
+
+            return response;
+        }
     }
 }

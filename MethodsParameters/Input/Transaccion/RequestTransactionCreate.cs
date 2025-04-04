@@ -41,4 +41,8 @@ namespace MethodsParameters.Input.Transaccion
         public string Persona { get; set; }
 
     }
+    public class RequestCreatedNequiPush
+    {
+        public string IdTransaccion { get; set; }
+    }
 }
