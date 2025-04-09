@@ -54,7 +54,7 @@ namespace Bussines
                 var BaseUrl = "";
                 var IdToken = HttpUtility.UrlEncode(Utilities.OperacionEncriptacion.EncryptString(ObjResponseSp.IdTransaccion.ToString(), Utilities.OperacionEncriptacion.Keys.UserAgreementKEY, Utilities.OperacionEncriptacion.Keys.UserAgreementIV)).UrlErrorCharacteresEncode();
 
-
+                bool FlagUpdate = true;
                 if (!string.IsNullOrEmpty(Request.banco))
                 {
                     BaseResponse ResponseCreatePSELink = await _gatewayServices.GatewayCreated(new RequestCreatedIdTransaccion
@@ -63,24 +63,33 @@ namespace Bussines
                         Persona =  Request.TipoPersona,
                         IdTransaccion = IdToken,
                     }, "Crear link directo PSE api publica.");
-
-                    ObjResponseSp.Url = ResponseCreatePSELink.Data.ToString();
+                    if (ResponseCreatePSELink.Success)
+                    {
+                        ObjResponseSp.Url = ResponseCreatePSELink.Data.ToString();
+                    }
+                    else
+                    {
+                        FlagUpdate = false;
+                    }
                 }
                 else
                 {
                     BaseUrl = _configuration.GetSection("RuteCheckOut").Value;
                     ObjResponseSp.Url = $"{BaseUrl}{IdToken}";
                 }
-
-                var result = await _iTransactionRepository.UpdateCreate(new RequestUpdateCreate
+                if (FlagUpdate)
                 {
-                    IdTransaccion = ObjResponseSp.IdTransaccion,
-                    MontoFinal = (decimal)Request.MontoFinal,
-                    Url = ObjResponseSp.Url,
-                    IdUsuario = (int)Request.IdUsuario
-                });
+                    var result = await _iTransactionRepository.UpdateCreate(new RequestUpdateCreate
+                    {
+                        IdTransaccion = ObjResponseSp.IdTransaccion,
+                        MontoFinal = (decimal)Request.MontoFinal,
+                        Url = ObjResponseSp.Url,
+                        IdUsuario = (int)Request.IdUsuario
+                    });
 
-                response.CreateSuccess("OK",ObjResponseSp);
+                    response.CreateSuccess("OK", ObjResponseSp);
+                }
+              
             }
             catch (CustomException ex)
             {

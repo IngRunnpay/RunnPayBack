@@ -60,8 +60,7 @@ namespace Bussines
                     var resp = TpagaClient.GetInfoTransaccion(ObjRequest.charge_token);
                     if (resp != null)
                     {
-                        //int EstadoAnterior = ResponseSpLog.IdEstadoTransaccion;
-                        int EstadoAnterior = 1;
+                        int EstadoAnterior = ResponseSpLog.IdEstadoTransaccion;
                         if (EstadoAnterior == (int)enumEstadoTransaccion.Pendiente || EstadoAnterior == (int)enumEstadoTransaccion.PendientePSE)
                         {
                             ActualizarEstadoTransaccion ActualizarEstado = new ActualizarEstadoTransaccion();
