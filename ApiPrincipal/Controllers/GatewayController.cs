@@ -70,30 +70,7 @@ namespace ApiPrincipal.Controllers
                 response.CreateError(ex);
             }
             return Ok(response);
-        }
-
-        [HttpPost(RoutesPath.GatewayController_GatewayCreated)]
-        [TypeFilter(typeof(AllowAnonymousFilter))]
-        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
-        public async Task<ActionResult> GatewayCreated([FromBody] RequestCreatedIdTransaccion ObjRequest)
-        {
-            BaseResponse response = new BaseResponse();
-            try
-            {
-                ValidateAccess(RoutesPath.GatewayController_GatewayCreated, new { });
-                response = await _GatewayServices.GatewayCreated(ObjRequest, RoutesPath.GatewayController_GatewayCreated);
-            }
-            catch (CustomException ex)
-            {
-                response.CreateError(ex);
-            }
-            catch (Exception ex)
-            {
-                await LogError(ex);
-                response.CreateError(ex);
-            }
-            return Ok(response);
-        }
+        }       
 
         [HttpGet(RoutesPath.GatewayController_GatewayGetDataTransaction)]
         [TypeFilter(typeof(AllowAnonymousFilter))]
@@ -162,16 +139,37 @@ namespace ApiPrincipal.Controllers
             }
             return Ok(response);
         }
-        [HttpPost(RoutesPath.GatewayController_GatewayNequiPush)]
+        [HttpPost(RoutesPath.GatewayController_GatewayPayment)]
         [TypeFilter(typeof(AllowAnonymousFilter))]
         [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
-        public async Task<ActionResult> GatewayNequiPush([FromBody] RequestCreatedNequiPush ObjRequest)
+        public async Task<ActionResult> Payment([FromBody] RequestPaymentContinue ObjRequest)
         {
             BaseResponse response = new BaseResponse();
             try
             {
-                ValidateAccess(RoutesPath.GatewayController_GatewayNequiPush, new { });
-                response = await _GatewayServices.GatewayNequiPush(ObjRequest, RoutesPath.GatewayController_GatewayNequiPush);
+                ValidateAccess(RoutesPath.GatewayController_GatewayPayment, new { });
+                response = await _GatewayServices.Payment(ObjRequest, RoutesPath.GatewayController_GatewayPayment);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await LogError(ex);
+                response.CreateError(ex);
+            }
+            return Ok(response);
+        }
+        [HttpPost(RoutesPath.GatewayController_GatewayStarteBP)]
+        [TypeFilter(typeof(AllowAnonymousFilter))]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
+        public async Task<ActionResult> PayStarteBPment([FromBody] RequestStarterBePay ObjRequest)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                response = await _GatewayServices.WebHook(ObjRequest, RoutesPath.GatewayController_GatewayStarteBP);
             }
             catch (CustomException ex)
             {

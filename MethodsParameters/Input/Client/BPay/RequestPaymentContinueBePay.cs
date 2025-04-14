@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MethodsParameters.Input.Client.BPay
 {
-    public class RequestNequiPush
+    public class RequestPaymentContinueBePay
     {
         public string direccion { get; set; }
         public string apellidos { get; set; }
@@ -24,7 +24,10 @@ namespace MethodsParameters.Input.Client.BPay
         public string metodopago { get; set; }
         public string Token { get; set; }
         public int account_id { get; set; }
-        public string nequi_push_phone { get; set; }
         public string redirect_url { get; set; }
+        public string nequi_push_phone { get; set; }  //Obligatorio para nequiPush
+        public string typeuser { get; set; }  //Obligatorio para PSE
+        public int bank { get; set; }  //Obligatorio para PSE
+
     }
 }

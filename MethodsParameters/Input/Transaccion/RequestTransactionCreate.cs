@@ -41,8 +41,13 @@ namespace MethodsParameters.Input.Transaccion
         public string Persona { get; set; }
 
     }
-    public class RequestCreatedNequiPush
+
+    public class RequestPaymentContinue
     {
         public string IdTransaccion { get; set; }
+        public int IdmedioPago { get; set; }
+        public string Banco { get; set; }
+        public string Persona { get; set; }
+
     }
 }

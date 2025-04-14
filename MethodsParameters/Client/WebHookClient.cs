@@ -18,7 +18,7 @@ namespace MethodsParameters.Client
             object response = new object();
             try
             {
-                ConsumeServices responseExternal = new ConsumeServices();
+                ConsumeExternalServices responseExternal = new ConsumeExternalServices();
                 var restBearer = responseExternal.RestBearer<object>(urlClient, ObjRequest);
                 restBearer.Wait();
                 response = restBearer.Result;

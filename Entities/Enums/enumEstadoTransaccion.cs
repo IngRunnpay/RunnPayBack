@@ -12,7 +12,7 @@ namespace Entities.Enums
         Aprobado = 2,
         Rechazado = 3,
         Creado = 4,
-        PendientePSE = 5,
+        PendienteConfirmacionPago = 5,
 
 
 

@@ -14,11 +14,11 @@ namespace Interfaces.Bussines
     {
         Task<BaseResponse> GatewayStarter(RequestQuicklyStarter ObjRequest, string Endpoint);
         Task<BaseResponse> GatewayBank(string Endpoint, string token);
-        Task<BaseResponse> GatewayCreated(RequestCreatedIdTransaccion ObjRequest, string Endpoint);
         Task<BaseResponse> GatewayGetDataTransaction(string IdTransaccion); 
         Task<BaseResponse> GatewayController_ResumePay(string IdTransaccion);
         Task<BaseResponse> GetMetodPagoXUsuario(string IdTransaccion);
-        Task<BaseResponse> GatewayNequiPush(RequestCreatedNequiPush ObjRequest, string Endpoint);
+        Task<BaseResponse> Payment(RequestPaymentContinue ObjRequest, string Endpoint);
+        Task<BaseResponse> WebHook(RequestStarterBePay ObjRequest, string Endpoint);
 
     }
 }

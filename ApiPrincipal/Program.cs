@@ -23,10 +23,10 @@ namespace ApiPrincipal
             builder.Services.AddAuthorization();
             builder.Services.CongifureSwagger();
             builder.Services.AddControllers();
-            //builder.WebHost.ConfigureKestrel(serverOptions =>
-            //{
-            //    serverOptions.Configure(builder.Configuration.GetSection("Kestrel"));
-            //});
+            builder.WebHost.ConfigureKestrel(serverOptions =>
+            {
+                serverOptions.Configure(builder.Configuration.GetSection("Kestrel"));
+            });
 
             var app = builder.Build();
 
@@ -64,10 +64,10 @@ namespace ApiPrincipal
             TpagaClient.UrlClient = builder.Configuration.GetSection("TpagaClient:Url").Value;
             TpagaClient.TokenClient = builder.Configuration.GetSection("TpagaClient:Token").Value;
 
-            BPayClient.UrlClient = builder.Configuration.GetSection("BePayClient:Url").Value;
-            BPayClient.Usuario = builder.Configuration.GetSection("BePayClient:Usuario").Value; 
-            BPayClient.Contraseña = builder.Configuration.GetSection("BePayClient:Contraseña").Value;
-            BPayClient.Account = builder.Configuration.GetSection("BePayClient:Id").Value;
+            BePayClient.UrlClient = builder.Configuration.GetSection("BePayClient:Url").Value;
+            BePayClient.Usuario = builder.Configuration.GetSection("BePayClient:Usuario").Value;
+            BePayClient.Contraseña = builder.Configuration.GetSection("BePayClient:Contraseña").Value;
+            BePayClient.Account = builder.Configuration.GetSection("BePayClient:Id").Value;
 
 
             app.Run();

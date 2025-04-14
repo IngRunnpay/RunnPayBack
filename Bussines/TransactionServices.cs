@@ -57,11 +57,12 @@ namespace Bussines
                 bool FlagUpdate = true;
                 if (!string.IsNullOrEmpty(Request.banco))
                 {
-                    BaseResponse ResponseCreatePSELink = await _gatewayServices.GatewayCreated(new RequestCreatedIdTransaccion
+                    BaseResponse ResponseCreatePSELink = await _gatewayServices.Payment(new RequestPaymentContinue
                     {
                         Banco = Request.banco,
                         Persona =  Request.TipoPersona,
                         IdTransaccion = IdToken,
+                        IdmedioPago = (int)enumTypePayment.PSE
                     }, "Crear link directo PSE api publica.");
                     if (ResponseCreatePSELink.Success)
                     {

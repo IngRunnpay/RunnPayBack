@@ -9,6 +9,7 @@ using MethodsParameters.Input.Transaccion;
 using MethodsParameters.Output.Dispersion;
 using MethodsParameters.Output.Gateway;
 using MethodsParameters.Output.Transaccion;
+using Microsoft.Data.SqlClient.DataClassification;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using System;
@@ -239,18 +240,31 @@ namespace DataAccess.Repository
             return response;
         }
 
-        public async Task<BaseResponse> UpdateNequiPush(int IdTransaccion)
+        public async Task<BaseResponse> UpdateBePay(int IdTransaccion, int IdMedioPago)
         {
             string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
-            string storedProcedure = "[dbo].[Transaccion.Sp_UpdateNequiPush]";
-            DynamicParameters parameters = new DynamicParameters();
+            string storedProcedure = "[dbo].[Transaccion.Sp_UpdateBePay]";
+            DynamicParameters parameters = new DynamicParameters(); 
             parameters.Add("@IdTransaccion", IdTransaccion);
+            parameters.Add("@IdMedioPago", IdMedioPago);
+
 
             var result = await _helper.ExecuteStoreProcedureFirstOrDefault<object>(connectionString, storedProcedure, parameters);
             var response = new BaseResponse();
             response.CreateSuccess("Ok", result);
 
             return response;
+        }
+        public async Task<ReponseFullDataTransaction> FullDataTransaction(int IdTransaccion)
+        {
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Transaccion.Sp_GetFullDataTransaccion]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdTransaccion", IdTransaccion);
+
+            ReponseFullDataTransaction result = await _helper.ExecuteStoreProcedureFirstOrDefault<ReponseFullDataTransaction>(connectionString, storedProcedure, parameters);
+     
+            return result;
         }
     }
 }

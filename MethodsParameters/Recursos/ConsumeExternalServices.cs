@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ECD.Utilidades.Recursos
 {
-    public class ConsumeServices
+    public class ConsumeExternalServices
     {
         private HttpClient Client;
 
@@ -117,8 +117,7 @@ namespace ECD.Utilidades.Recursos
 
                             break;
                         case "BePay":
-                            encodedUser = Convert.ToBase64String(Encoding.UTF8.GetBytes(accessToken));
-                            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", encodedUser);
+                            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
                             break;
                     }

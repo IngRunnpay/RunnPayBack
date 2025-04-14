@@ -28,7 +28,9 @@ namespace Interfaces.DataAccess.Repository
         Task<BaseResponse> Resporttransaction(RequestSpTransactions request); 
         Task<ReponseBalance> Balance(string request);
         Task<BaseResponse> GetMetodPagoXUsuario(int IdTransaccion);
-        Task<BaseResponse> UpdateNequiPush(int IdTransaccion);
+        Task<BaseResponse> UpdateBePay(int IdTransaccion, int IdMedioPago);
+        Task<ReponseFullDataTransaction> FullDataTransaction(int IdTransaccion);
+
 
     }
 }

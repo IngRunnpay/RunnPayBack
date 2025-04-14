@@ -23,6 +23,7 @@ using System.Web;
 using MethodsParameters.Client;
 using MethodsParameters.Input.Webhook;
 using MethodsParameters.Input.Client.BPay;
+using MethodsParameters.Output.Client.Bpay;
 
 namespace Bussines
 {
@@ -38,7 +39,7 @@ namespace Bussines
             _logRepository = logRepository;
             _TransactionRepository = transactionRepository;
         }
-
+        #region Public
         public async Task<BaseResponse> GatewayStarter(RequestQuicklyStarter ObjRequest, string Endpoint)
         {
             BaseResponse response = new BaseResponse();
@@ -60,8 +61,15 @@ namespace Bussines
                     var resp = TpagaClient.GetInfoTransaccion(ObjRequest.charge_token);
                     if (resp != null)
                     {
+                        ObjSpRequest.IdTransaccion = await _TransactionRepository.GetIdTranaccionbyReferenciaExterno(ObjRequest.charge_token);
+                        ObjSpRequest.Endpoint = Endpoint;
+                        ObjSpRequest.Request = JsonSerializer.Serialize(ObjRequest.charge_token);
+                        ObjSpRequest.Response = JsonSerializer.Serialize(resp);
+                        ObjSpRequest.Enviada = true;
+
+                        ResponseSpLog = await _logRepository.LoggExternalPasarela(ObjSpRequest);
                         int EstadoAnterior = ResponseSpLog.IdEstadoTransaccion;
-                        if (EstadoAnterior == (int)enumEstadoTransaccion.Pendiente || EstadoAnterior == (int)enumEstadoTransaccion.PendientePSE)
+                        if (EstadoAnterior == (int)enumEstadoTransaccion.Pendiente || EstadoAnterior == (int)enumEstadoTransaccion.PendienteConfirmacionPago)
                         {
                             ActualizarEstadoTransaccion ActualizarEstado = new ActualizarEstadoTransaccion();
                             ActualizarEstado.IdTransaccion = ResponseSpLog.IdTransaccion;
@@ -153,84 +161,28 @@ namespace Bussines
                 response.CreateError(ex);
             }
             return response;
-        }
-        public async Task<BaseResponse> GatewayCreated(RequestCreatedIdTransaccion ObjRequest, string Endpoint)
-        {
-            BaseResponse response = new BaseResponse();
-            try
-            {
-                string IdTransaccion = OperacionEncriptacion.DecryptAES(HttpUtility.UrlDecode(ObjRequest.IdTransaccion.UrlErrorCharacteresEncode(true)), Utilities.OperacionEncriptacion.Keys.UserAgreementKEY, Utilities.OperacionEncriptacion.Keys.UserAgreementIV);
-
-                RequestCreatePseTpago ObjRquestGateway = new RequestCreatePseTpago();
-                ResponseSp_GetDataTransaccion ResponseTransaction= await _TransactionRepository.DataTransaction(Convert.ToInt32(IdTransaccion));
-                string BaseRuta = _configuration.GetSection("RuteResume").Value;
-
-                ObjRquestGateway.bank_code = ObjRequest.Banco;
-                ObjRquestGateway.order_id = ResponseTransaction.IdTransaccion.ToString();
-                ObjRquestGateway.amount = ResponseTransaction.MontoFinal.ToString("0");
-                ObjRquestGateway.vat_amount = "0";
-                ObjRquestGateway.description = $"RunnPay|{IdTransaccion}|{ResponseTransaction.Referencia}|{ResponseTransaction.DescripcionCompra}";
-                ObjRquestGateway.user_type = ObjRequest.Persona;
-                ObjRquestGateway.buyer_email = ResponseTransaction.UsuCorreo;
-                ObjRquestGateway.buyer_full_name = ResponseTransaction.UsuNombre;
-                ObjRquestGateway.document_type = ResponseTransaction.Documento;
-                ObjRquestGateway.document_number = ResponseTransaction.UsuDocumento;
-                ObjRquestGateway.redirect_url = (string.IsNullOrEmpty(ResponseTransaction.UrlClient))? $"{BaseRuta}{ObjRequest.IdTransaccion}": ResponseTransaction.UrlClient;
-                ObjRquestGateway.buyer_phone_number = ResponseTransaction.UsuTelefono;
-
-                var resp = TpagaClient.CreatePSETpago(ObjRquestGateway);
-
-                SpLogPasarelaExterna ObjSpRequest = new SpLogPasarelaExterna();
-                ObjSpRequest.IdTransaccion = Convert.ToInt32(IdTransaccion);
-                ObjSpRequest.Endpoint = Endpoint;
-                ObjSpRequest.Request = JsonSerializer.Serialize(ObjRquestGateway);
-                ObjSpRequest.Response = JsonSerializer.Serialize(resp);
-                ObjSpRequest.Enviada = true;
-                await _logRepository.LoggExternalPasarela(ObjSpRequest);
-
-                if (!string.IsNullOrEmpty(resp.token))
-                {
-                    if (resp.return_code == "SUCCESS")
-                    {
-                        response.CreateSuccess("OK", resp.bank_url);
-                        _logRepository.LogLinKPSEExternalPasarela(new SpLogLinkPSEPasarelas
-                        {
-                            IdTransaccion = ObjSpRequest.IdTransaccion,
-                            Url = resp.bank_url,
-                            ReferenciaExterno = resp.token
-                        });
-                    }
-                    else
-                    {
-                        response.CreateError("No logramos realizar tu gestión, intenta nuevamente.");
-                    }
-
-                }
-                else
-                {
-                    response.CreateError((resp.error_message != null) ? resp.error_message : null);
-                }
-            }
-            catch (CustomException ex)
-            {
-                response.CreateError(ex);
-            }
-            catch (Exception ex)
-            {
-                await _logRepository.Logger(new LogIn(ex));
-                response.CreateError(ex);
-            }
-            return response;
-        }
-
+        }       
         public async Task<BaseResponse> GatewayGetDataTransaction(string IdTransaccion)
         {
             BaseResponse response = new BaseResponse();
             try
             {
                 string Token = OperacionEncriptacion.DecryptAES(HttpUtility.UrlDecode(IdTransaccion.UrlErrorCharacteresEncode(true)), Utilities.OperacionEncriptacion.Keys.UserAgreementKEY, Utilities.OperacionEncriptacion.Keys.UserAgreementIV);
+                ResponseSp_GetDataTransaccion Response = new ResponseSp_GetDataTransaccion();
+                Response = await _TransactionRepository.DataTransaction(Convert.ToInt32(Token));
+                if (response != null)
+                {
+                    if (Response.IdEstadoTransaccion == (int)enumEstadoTransaccion.PendienteConfirmacionPago)
+                    {
+                        ReponseFullDataTransaction DataFull = await _TransactionRepository.FullDataTransaction(Convert.ToInt32(Token));
+                        RequestStarterBePay ObjRequest = new RequestStarterBePay();
+                        ObjRequest.transaction_ide = DataFull.ReferenciaExterno;
+                        ObjRequest.transacton_ide = DataFull.ReferenciaExterno;
+                        await WebHook(ObjRequest, $"Ejecucion manual webhook con metodo GatewayGetDataTransaction");
+                        Response = await _TransactionRepository.DataTransaction(Convert.ToInt32(Token));
 
-                ResponseSp_GetDataTransaccion Response = await _TransactionRepository.DataTransaction(Convert.ToInt32(Token));
+                    }
+                }
                 response.CreateSuccess("OK", Response);
             }
             catch (CustomException ex)
@@ -244,16 +196,28 @@ namespace Bussines
             }
             return response;
         }
-
         public async Task<BaseResponse> GatewayController_ResumePay(string IdTransaccion)
         {
             BaseResponse response = new BaseResponse();
             try
             {
                 string Token = OperacionEncriptacion.DecryptAES(HttpUtility.UrlDecode(IdTransaccion.UrlErrorCharacteresEncode(true)), Utilities.OperacionEncriptacion.Keys.UserAgreementKEY, Utilities.OperacionEncriptacion.Keys.UserAgreementIV);
+                ResponseSpResumePay Response = new ResponseSpResumePay();
+                Response = await _TransactionRepository.QuicklypayController_ResumePay(Convert.ToInt32(Token));
+                if (response != null)
+                {
+                    if (Response.IdEstadoTransaccion == (int)enumEstadoTransaccion.PendienteConfirmacionPago)
+                    {
+                        ReponseFullDataTransaction DataFull = await _TransactionRepository.FullDataTransaction(Convert.ToInt32(Token));
+                        RequestStarterBePay ObjRequest = new RequestStarterBePay();
+                        ObjRequest.transaction_ide = DataFull.ReferenciaExterno;
+                        ObjRequest.transacton_ide = DataFull.ReferenciaExterno;
+                        await WebHook(ObjRequest, $"Ejecucion manual webhook con metodo GatewayGetDataTransaction");
+                        Response = await _TransactionRepository.QuicklypayController_ResumePay(Convert.ToInt32(Token)); ;
 
-                ResponseSpResumePay ResponseQuickly = await _TransactionRepository.QuicklypayController_ResumePay(Convert.ToInt32(Token));
-                response.CreateSuccess("OK", ResponseQuickly);
+                    }
+                }
+                response.CreateSuccess("OK", Response);
             }
             catch (CustomException ex)
             {
@@ -287,8 +251,7 @@ namespace Bussines
             }
             return response;
         }
-
-        public async Task<BaseResponse> GatewayNequiPush(RequestCreatedNequiPush ObjRequest, string Endpoint)
+        public async Task<BaseResponse> Payment(RequestPaymentContinue ObjRequest, string Endpoint)
         {
             BaseResponse response = new BaseResponse();
             try
@@ -296,58 +259,51 @@ namespace Bussines
                 string IdTransaccion = OperacionEncriptacion.DecryptAES(HttpUtility.UrlDecode(ObjRequest.IdTransaccion.UrlErrorCharacteresEncode(true)), Utilities.OperacionEncriptacion.Keys.UserAgreementKEY, Utilities.OperacionEncriptacion.Keys.UserAgreementIV);
                 ResponseSp_GetDataTransaccion ResponseTransaction = await _TransactionRepository.DataTransaction(Convert.ToInt32(IdTransaccion));
                 string BaseRuta = _configuration.GetSection("RuteResume").Value;
+                
                 if (ResponseTransaction != null)
                 {
-                    RequestNequiPush Nequi = new RequestNequiPush();
                     RequestCreateTransaction Transaction = new RequestCreateTransaction();
 
-                    Transaction.reference = ResponseTransaction.Referencia;
+                    Transaction.reference = $"RunnPay|{IdTransaccion}|{ResponseTransaction.Referencia}";
                     Transaction.total = ResponseTransaction.MontoFinal.ToString().Replace(",", ".");
                     Transaction.description = ResponseTransaction.DescripcionCompra;
-                    Transaction.redirect_url = Nequi.redirect_url = (string.IsNullOrEmpty(ResponseTransaction.UrlClient)) ? $"{BaseRuta}{ObjRequest.IdTransaccion}" : ResponseTransaction.UrlClient;
+                    Transaction.redirect_url =  (string.IsNullOrEmpty(ResponseTransaction.UrlClient)) ? $"{BaseRuta}{ObjRequest.IdTransaccion}" : ResponseTransaction.UrlClient;
 
-                    Nequi.email = ResponseTransaction.UsuCorreo;
-                    Nequi.nombres = ResponseTransaction.UsuNombre;
-                    Nequi.numero_documento = ResponseTransaction.UsuDocumento;
-                    Nequi.telefono = Nequi.nequi_push_phone = ResponseTransaction.UsuTelefono;
-
-                    switch (ResponseTransaction.Documento)
+                    RequestPaymentContinueBePay RequestBePay = await GenerateRequestBePay(ObjRequest, Transaction, ResponseTransaction);
+                    BaseResponseBpay resp = new BaseResponseBpay();
+                    switch (ObjRequest.IdmedioPago)
                     {
-                        case "CC":
-                            Nequi.tipo_documento = 2;
+                        case (int)enumTypePayment.PSE:
+                            resp = BePayClient.PSE(RequestBePay, Transaction);
                             break;
-                        case "CE":
-                            Nequi.tipo_documento = 3;
-                            break;
-                        case "NIT":
-                            Nequi.tipo_documento = 1;
-                            break;
-                        case "TI":
-                            Nequi.tipo_documento = 5;
-                            break;
-                        case "PP":
-                            Nequi.tipo_documento = 4;
+                        case (int)enumTypePayment.NEQUIPUSH:
+                             resp = BePayClient.NequiPush(RequestBePay, Transaction);
                             break;
                     }
-
-                    var resp = BPayClient.NequiPush(Nequi, Transaction);
 
                     SpLogPasarelaExterna ObjSpRequest = new SpLogPasarelaExterna();
                     ObjSpRequest.IdTransaccion = Convert.ToInt32(IdTransaccion);
                     ObjSpRequest.Endpoint = Endpoint;
-                    ObjSpRequest.Request = JsonSerializer.Serialize(ObjRequest);
+                    ObjSpRequest.Request = JsonSerializer.Serialize(RequestBePay);
                     ObjSpRequest.Response = JsonSerializer.Serialize(resp);
                     ObjSpRequest.Enviada = true;
                     await _logRepository.LoggExternalPasarela(ObjSpRequest);
 
                     if (resp.success)
                     {
-                        var update = await _TransactionRepository.UpdateNequiPush(Convert.ToInt32(IdTransaccion));
-                        response.CreateSuccess("Ok", resp.data);
+                        var update = await _TransactionRepository.UpdateBePay(Convert.ToInt32(IdTransaccion), ObjRequest.IdmedioPago);
+                        
+                        response.CreateSuccess("Ok", (ObjRequest.IdmedioPago == (int)enumTypePayment.PSE)? resp.data.link : Transaction.redirect_url);
+                        _logRepository.LogLinKPSEExternalPasarela(new SpLogLinkPSEPasarelas
+                        {
+                            IdTransaccion = ObjSpRequest.IdTransaccion,
+                            Url = resp.data.link,
+                            ReferenciaExterno = resp.data.ide
+                        });
                     }
                     else
                     {
-                        response.CreateError((resp.message != null) ? resp.message : "Error al generar nequiPush.");
+                        response.CreateError((resp.message != null) ? resp.message : "Error al continuar con la transacción.");
                     }
                 }
                 else
@@ -366,5 +322,192 @@ namespace Bussines
             }
             return response;
         }
+        public async Task<BaseResponse> WebHook(RequestStarterBePay ObjRequest, string Endpoint)
+        {
+            BaseResponse response = new BaseResponse();
+            ResponseSpLogPasarelaExterna ResponseSpLog = new ResponseSpLogPasarelaExterna();
+            try
+            {
+                SpLogPasarelaExterna ObjSpRequest = new SpLogPasarelaExterna();
+
+                ObjSpRequest.IdTransaccion = await _TransactionRepository.GetIdTranaccionbyReferenciaExterno(ObjRequest.transaction_ide);
+                ObjSpRequest.Endpoint = Endpoint;
+                ObjSpRequest.Request = null;
+                ObjSpRequest.Response = JsonSerializer.Serialize(ObjRequest);
+                ObjSpRequest.Enviada = false;
+
+                ResponseSpLog = await _logRepository.LoggExternalPasarela(ObjSpRequest);
+
+                if (ResponseSpLog.IdTransaccion > 0)
+                {
+                    BaseResponseBpay resp = BePayClient.GetDataTransaction(ObjRequest.transaction_ide);
+                    if (resp != null)
+                    {
+                        ObjSpRequest.Endpoint = "BPayClient.GetDataTransaction";
+                        ObjSpRequest.Request = JsonSerializer.Serialize(ObjRequest.transaction_ide);
+                        ObjSpRequest.Response = JsonSerializer.Serialize(resp);
+                        ObjSpRequest.Enviada = true;
+
+                        ResponseSpLog = await _logRepository.LoggExternalPasarela(ObjSpRequest);
+                        int EstadoAnterior = ResponseSpLog.IdEstadoTransaccion;
+                        if (EstadoAnterior == (int)enumEstadoTransaccion.Pendiente || EstadoAnterior == (int)enumEstadoTransaccion.PendienteConfirmacionPago)
+                        {
+                            ActualizarEstadoTransaccion ActualizarEstado = new ActualizarEstadoTransaccion();
+                            ActualizarEstado.IdTransaccion = ResponseSpLog.IdTransaccion;
+                            if (resp.data.status.ToUpper() != "PENDING")
+                            {
+                                switch (resp.data.status.ToUpper())
+                                {
+                                    case "APPROVED":
+                                        ActualizarEstado.idEstadoTransaccio = (int)enumEstadoTransaccion.Aprobado;
+                                        break;
+                                    case "REJECTED":
+                                        ActualizarEstado.idEstadoTransaccio = (int)enumEstadoTransaccion.Rechazado;
+                                        break;
+                                }
+
+                                await _TransactionRepository.UpdateTransaction(ActualizarEstado);
+
+                                ResponseSpDataWebHook ObjResponseDataWeb = await _TransactionRepository.GetDataWebHook(ObjSpRequest.IdTransaccion);
+                                if (!string.IsNullOrEmpty(ObjResponseDataWeb.UrlDelivery))
+                                {
+                                    RequesWebHook ObjWeb = new RequesWebHook();
+                                    ObjWeb.idTransaccion = OperacionEncriptacion.EncryptString(ObjResponseDataWeb.IdTransaccion.ToString(), ObjResponseDataWeb.UserName, ObjResponseDataWeb.Id);
+                                    ObjWeb.descripcionEstado = OperacionEncriptacion.EncryptString(ObjResponseDataWeb.Descripcion, ObjResponseDataWeb.UserName, ObjResponseDataWeb.Id);
+                                    ObjWeb.idEstado = OperacionEncriptacion.EncryptString(ObjResponseDataWeb.IdEstadoTransaccion.ToString(), ObjResponseDataWeb.UserName, ObjResponseDataWeb.Id);
+                                    ObjWeb.mensaje = OperacionEncriptacion.EncryptString(ObjResponseDataWeb.Mensaje, ObjResponseDataWeb.UserName, ObjResponseDataWeb.Id);
+                                    WebHookClient.SendClientWebhook(ObjResponseDataWeb.UrlDelivery, ObjWeb);
+                                }
+                            }
+
+                            response.CreateSuccess("OK", new { });
+                        }
+                        else
+                        {
+                            response.CreateError("La transacción ya fue rechazada o aprobada.");
+                        }
+                    }
+                    else
+                    {
+                        response.CreateError("Transaccion no encontrada.");
+                    }
+                }
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+
+
+            return response;
+        }
+
+        #endregion
+        #region private
+        private async Task<RequestPaymentContinueBePay> GenerateRequestBePay(RequestPaymentContinue request, RequestCreateTransaction transactionBePay, ResponseSp_GetDataTransaccion dataTransaction)
+        {
+            RequestPaymentContinueBePay ObjRequest = new RequestPaymentContinueBePay();
+            try
+            {
+                ObjRequest.email = dataTransaction.UsuCorreo;
+                ObjRequest.nombres = dataTransaction.UsuNombre;
+                ObjRequest.numero_documento = dataTransaction.UsuDocumento;
+                ObjRequest.telefono = ObjRequest.nequi_push_phone = dataTransaction.UsuTelefono;
+                ObjRequest.tipo_documento = await GetTypeDocumentBePay(dataTransaction.Documento);
+                ObjRequest.redirect_url = transactionBePay.redirect_url;
+                ObjRequest.direccion = "N/A";
+                ObjRequest.apellidos = ObjRequest.nombres;
+                ObjRequest.ciudad = 149237;
+                ObjRequest.pais = 48;
+                ObjRequest.company_terms = "Y";
+                ObjRequest.transaction_ip = "0.0.0.0";
+                ObjRequest.codigo_postal = "055422";
+                
+
+                switch (request.IdmedioPago)
+                {
+                    case (int)enumTypePayment.PSE:
+                        ObjRequest.transaction_id = "voluptatem";
+                        ObjRequest.metodopago = "PSE";
+                        ObjRequest.typeuser = await GetTypePersonPSEBePay(request.Persona);
+                        ObjRequest.bank = Convert.ToInt32(request.Banco);
+
+                        break;
+                    case (int)enumTypePayment.NEQUIPUSH:
+                        ObjRequest.transaction_id = "nulla";
+                        ObjRequest.metodopago = "NEQUI_PUSH";
+
+                        break;
+                }
+            }
+            catch (CustomException ex)
+            {
+                ObjRequest = null;
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                ObjRequest = null;
+            }
+            return ObjRequest;
+        }
+        private async Task<int> GetTypeDocumentBePay(string Documento)
+        {
+            int response = 0;
+            try
+            {
+                switch (Documento)
+                {
+                    case "CC":
+                        response = 2;
+                        break;
+                    case "CE":
+                        response = 3;
+                        break;
+                    case "NIT":
+                        response = 1;
+                        break;
+                    case "TI":
+                        response = 5;
+                        break;
+                    case "PP":
+                        response = 4;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+            }
+            return response;
+        }
+        private async Task<string> GetTypePersonPSEBePay(string Persona)
+        {
+            string response = "person";
+            try
+            {
+                switch (Persona)
+                {
+                    case "NATURAL":
+                        response = "person";
+                        break;
+                    case "JURIDÍCA":
+                        response = "company";
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+            }
+            return response;
+        }
+        #endregion
+
     }
 }

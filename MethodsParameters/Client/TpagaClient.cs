@@ -41,7 +41,7 @@ namespace MethodsParameters.Client
             List<ResponseGetBank> objresponse = new List<ResponseGetBank>();
             try
             {
-                ConsumeServices responseExternal = new ConsumeServices();                
+                ConsumeExternalServices responseExternal = new ConsumeExternalServices();                
                 var restBearer = responseExternal.GetAsync<List<ResponseGetBank>>(UrlClient + "/public/banks", new { },TokenClient, "Tpaga");
                 restBearer.Wait();
                 objresponse = restBearer.Result;
@@ -57,7 +57,7 @@ namespace MethodsParameters.Client
             ResponseCreatePse objresponse = new ResponseCreatePse();
             try
             {
-                ConsumeServices responseExternal = new ConsumeServices();
+                ConsumeExternalServices responseExternal = new ConsumeExternalServices();
                 var restBearer = responseExternal.RestBearer<ResponseCreatePse>(UrlClient + "/public/charge", ObjRequest, TokenClient, "Tpaga");
                 restBearer.Wait();
                 objresponse = restBearer.Result;
@@ -74,7 +74,7 @@ namespace MethodsParameters.Client
             GetTransactionStatus objresponse = new GetTransactionStatus();
             try
             {
-                ConsumeServices responseExternal = new ConsumeServices();
+                ConsumeExternalServices responseExternal = new ConsumeExternalServices();
                 var restBearer = responseExternal.GetAsync<GetTransactionStatus>(UrlClient + $"/public/charge/{tokenConsulta}", new { }, TokenClient, "Tpaga");
                 restBearer.Wait();
                 objresponse = restBearer.Result;

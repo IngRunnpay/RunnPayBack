@@ -19,11 +19,13 @@
         public const string GatewayController = "Gateway";
         public const string GatewayController_GatewayStarter = Base + "/" + GatewayController + "/GatewayStarter/";
         public const string GatewayController_GatewayBank = Base + "/" + GatewayController + "/GatewayBank/";
-        public const string GatewayController_GatewayCreated = Base + "/" + GatewayController + "/GatewayCreated/";
         public const string GatewayController_GatewayGetDataTransaction = Base + "/" + GatewayController + "/GatewayGetDataTransaction/";
         public const string GatewayController_ResumePay = Base + "/" + GatewayController + "/ResumePay/";
         public const string GatewayController_GetMetodPagoXUsuario = Base + "/" + GatewayController + "/GetMetodPagoXUsuario/";
-        public const string GatewayController_GatewayNequiPush = Base + "/" + GatewayController + "/NequiPush/";
+        public const string GatewayController_GatewayPayment = Base + "/" + GatewayController + "/Payment/";
+        public const string GatewayController_GatewayStarteBP = Base + "/" + GatewayController + "/StarterBP/";
+
+
 
         #endregion
 
