@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Entities\Entities.csproj" />
+	  <ProjectReference Include="..\Entities\Entities.csproj" />
+	  <ProjectReference Include="..\Interfaces.DataAccess\Interfaces.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

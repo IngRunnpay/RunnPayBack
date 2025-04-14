@@ -1,10 +1,10 @@
 ﻿using Entities.General;
 using Interfaces.Bussines;
-using MethodsParameters.Input.PortalUser;
+using Entities.Input.PortalUser;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ApiPrincipal.Routes;
-using MethodsParameters.Input.Reports;
+using Entities.Input.Reports;
 using Microsoft.IdentityModel.Tokens;
 using Bussines;
 

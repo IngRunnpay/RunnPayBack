@@ -1,8 +1,8 @@
 ﻿using Entities.General;
-using MethodsParameters.Input;
-using MethodsParameters.Input.Gateway;
-using MethodsParameters.Input.Transaccion;
-using MethodsParameters.Output.Gateway;
+using Entities.Input;
+using Entities.Input.Gateway;
+using Entities.Input.Transaccion;
+using Entities.Output.Gateway;
 using System;
 using System.Collections.Generic;
 using System.Linq;

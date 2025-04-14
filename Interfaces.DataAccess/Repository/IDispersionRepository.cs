@@ -1,7 +1,7 @@
 ﻿using Entities.General;
-using MethodsParameters.Input.Dispersion;
-using MethodsParameters.Input.Reports;
-using MethodsParameters.Output.Dispersion;
+using Entities.Input.Dispersion;
+using Entities.Input.Reports;
+using Entities.Output.Dispersion;
 using System;
 using System.Collections.Generic;
 using System.Linq;

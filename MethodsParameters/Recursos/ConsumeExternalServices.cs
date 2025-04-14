@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Azure.Core;
 using Newtonsoft.Json.Linq;
+using MethodsParameters.Client;
 
 namespace ECD.Utilidades.Recursos
 {
@@ -37,6 +38,7 @@ namespace ECD.Utilidades.Recursos
         }
         public async Task<T> PostAsync<T>(string url, object request, string username = null, string password = null, string channel = null)
         {
+            //LogShared.LogDataDetail(url)
             CreateNewInstanClient();
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {

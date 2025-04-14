@@ -205,11 +205,11 @@ namespace ApiPublica.Extensions
                 {
                     var headers = context.HttpContext.Request.Headers.ToList();
                     var info = headers.Select(x => string.Format("Cabecera [ {0} => {1} ]", x.Key, string.Join('|', x.Value.ToList())));
-                    await _logService.Logger(new MethodsParameters.Input.LogIn($"Acceso no autorizado.", string.Join(Environment.NewLine, info), "Error"));
+                    await _logService.Logger(new Entities.Input.LogIn($"Acceso no autorizado.", string.Join(Environment.NewLine, info), "Error"));
                 }
                 catch (Exception ex)
                 {
-                    await _logService.Logger(new MethodsParameters.Input.LogIn(ex));
+                    await _logService.Logger(new Entities.Input.LogIn(ex));
                 }
             }
         }

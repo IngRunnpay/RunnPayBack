@@ -1,7 +1,7 @@
 ﻿using ECD.Utilidades.Recursos;
-using MethodsParameters.Input.Gateway;
-using MethodsParameters.Input.Webhook;
-using MethodsParameters.Output.Gateway;
+using Entities.Input.Gateway;
+using Entities.Input.Webhook;
+using Entities.Output.Gateway;
 using System;
 using System.Collections.Generic;
 using System.Linq;

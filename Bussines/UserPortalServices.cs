@@ -1,20 +1,20 @@
 ﻿using Entities.General;
 using Interfaces.Bussines;
 using Interfaces.DataAccess.Repository;
-using MethodsParameters.Input.Transaccion;
-using MethodsParameters.Input;
+using Entities.Input.Transaccion;
+using Entities.Input;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MethodsParameters.Input.PortalUser;
-using MethodsParameters.Output.PortalUser;
-using MethodsParameters.Input.Otp;
+using Entities.Input.PortalUser;
+using Entities.Output.PortalUser;
+using Entities.Input.Otp;
 using System.Text.Json.Nodes;
 using System.Text.Json;
-using MethodsParameters.Output.Otp;
+using Entities.Output.Otp;
 
 namespace Bussines
 {

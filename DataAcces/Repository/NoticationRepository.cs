@@ -2,8 +2,8 @@
 using Entities.General;
 using Interfaces.DataAccess.Repository;
 using Interfaces.DataAccess.Utilities;
-using MethodsParameters.Input;
-using MethodsParameters.Input.Transaccion;
+using Entities.Input;
+using Entities.Input.Transaccion;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;

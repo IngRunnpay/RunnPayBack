@@ -2,10 +2,10 @@
 using Entities.General;
 using Interfaces.DataAccess.Repository;
 using Interfaces.DataAccess.Utilities;
-using MethodsParameters.Input;
-using MethodsParameters.Input.Gateway;
-using MethodsParameters.Input.Transaccion;
-using MethodsParameters.Output.Gateway;
+using Entities.Input;
+using Entities.Input.Gateway;
+using Entities.Input.Transaccion;
+using Entities.Output.Gateway;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using System;

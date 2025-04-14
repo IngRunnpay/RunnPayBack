@@ -1,29 +1,29 @@
 ﻿using Entities.General;
 using Interfaces.Bussines;
 using Interfaces.DataAccess.Repository;
-using MethodsParameters.Input.Transaccion;
-using MethodsParameters.Input;
+using Entities.Input.Transaccion;
+using Entities.Input;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MethodsParameters.Input.Gateway;
+using Entities.Input.Gateway;
 using System.Text.Json;
 using static MethodsParameters.Utilities;
 using System.Data;
-using MethodsParameters.Output.Gateway;
+using Entities.Output.Gateway;
 using Entities.Enums;
 using System.Net;
 using MethodsParameters;
 using Newtonsoft.Json.Linq;
-using MethodsParameters.Output.Transaccion;
+using Entities.Output.Transaccion;
 using System.Web;
 using MethodsParameters.Client;
-using MethodsParameters.Input.Webhook;
-using MethodsParameters.Input.Client.BPay;
-using MethodsParameters.Output.Client.Bpay;
+using Entities.Input.Webhook;
+using Entities.Input.Client.BPay;
+using Entities.Output.Client.Bpay;
 
 namespace Bussines
 {

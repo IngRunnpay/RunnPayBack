@@ -1,6 +1,6 @@
 ﻿using Entities.General;
-using MethodsParameters.Input.Dispersion;
-using MethodsParameters.Input.Reports;
+using Entities.Input.Dispersion;
+using Entities.Input.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;

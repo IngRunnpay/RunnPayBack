@@ -1,6 +1,6 @@
 ﻿using Entities.General;
-using MethodsParameters.Input.PortalUser;
-using MethodsParameters.Input.Transaccion;
+using Entities.Input.PortalUser;
+using Entities.Input.Transaccion;
 using System;
 using System.Collections.Generic;
 using System.Linq;

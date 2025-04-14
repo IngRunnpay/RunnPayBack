@@ -1,4 +1,4 @@
-﻿using MethodsParameters.Input;
+﻿using Entities.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;

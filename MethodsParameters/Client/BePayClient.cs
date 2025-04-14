@@ -1,9 +1,9 @@
 ﻿using ECD.Utilidades.Recursos;
 using Entities.General;
-using MethodsParameters.Input.Client.BPay;
-using MethodsParameters.Input.Gateway;
-using MethodsParameters.Output.Client.Bpay;
-using MethodsParameters.Output.Gateway;
+using Entities.Input.Client.BPay;
+using Entities.Input.Gateway;
+using Entities.Output.Client.Bpay;
+using Entities.Output.Gateway;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MethodsParameters.Client
 {
-    public class BePayClient
+    public static class BePayClient
     {
 
         public static string UrlClient = "";
@@ -22,6 +22,7 @@ namespace MethodsParameters.Client
         public static string CurrentToken = "";
         public static string TokenTransaccion = "";
         public static string Account = "";
+
 
         private static async Task Login ()
         {

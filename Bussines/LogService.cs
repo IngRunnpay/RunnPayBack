@@ -1,6 +1,6 @@
 ﻿using Interfaces.Bussines;
 using Interfaces.DataAccess.Repository;
-using MethodsParameters.Input;
+using Entities.Input;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;

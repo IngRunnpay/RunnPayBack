@@ -1,8 +1,8 @@
 ﻿using Entities.General;
 using Interfaces.Bussines;
 using Interfaces.DataAccess.Repository;
-using MethodsParameters.Input;
-using MethodsParameters.Output.Transaccion;
+using Entities.Input;
+using Entities.Output.Transaccion;
 using MethodsParameters;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static MethodsParameters.Utilities;
 using System.Web;
-using MethodsParameters.Output.DashBoard;
+using Entities.Output.DashBoard;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Bussines

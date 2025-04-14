@@ -1,6 +1,6 @@
 ﻿using ECD.Utilidades.Recursos;
-using MethodsParameters.Input.Gateway;
-using MethodsParameters.Output.Gateway;
+using Entities.Input.Gateway;
+using Entities.Output.Gateway;
 using Microsoft.IdentityModel.Protocols;
 using Newtonsoft.Json;
 using System;

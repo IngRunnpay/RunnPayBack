@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Interfaces.Bussines\Interfaces.Bussines.csproj" />
-    <ProjectReference Include="..\Interfaces.DataAccess\Interfaces.DataAccess.csproj" />
+	  <ProjectReference Include="..\MethodsParameters\MethodsParameters.csproj" />
   </ItemGroup>
 
 </Project>

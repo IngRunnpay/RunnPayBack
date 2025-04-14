@@ -1,7 +1,7 @@
 ﻿using Entities.General;
-using MethodsParameters.Input.Reports;
-using MethodsParameters.Input.Transaccion;
-using MethodsParameters.Output.Transaccion;
+using Entities.Input.Reports;
+using Entities.Input.Transaccion;
+using Entities.Output.Transaccion;
 using System;
 using System.Collections.Generic;
 using System.Linq;

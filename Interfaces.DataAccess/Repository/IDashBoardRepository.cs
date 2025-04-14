@@ -1,5 +1,5 @@
 ﻿using Entities.General;
-using MethodsParameters.Output.DashBoard;
+using Entities.Output.DashBoard;
 using System;
 using System.Collections.Generic;
 using System.Linq;

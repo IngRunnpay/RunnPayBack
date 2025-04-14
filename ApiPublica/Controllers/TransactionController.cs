@@ -1,7 +1,7 @@
 ﻿using ApiPublica.Routes;
 using Entities.General;
 using Interfaces.Bussines;
-using MethodsParameters.Input.Transaccion;
+using Entities.Input.Transaccion;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using ApiPublica.Controllers;

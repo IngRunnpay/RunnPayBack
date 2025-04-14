@@ -1,9 +1,9 @@
 ﻿using Entities.General;
-using MethodsParameters.Input;
-using MethodsParameters.Input.Gateway;
-using MethodsParameters.Input.Otp;
-using MethodsParameters.Input.PortalUser;
-using MethodsParameters.Output.Otp;
+using Entities.Input;
+using Entities.Input.Gateway;
+using Entities.Input.Otp;
+using Entities.Input.PortalUser;
+using Entities.Output.Otp;
 using System;
 using System.Collections.Generic;
 using System.Linq;

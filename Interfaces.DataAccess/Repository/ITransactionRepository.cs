@@ -1,9 +1,9 @@
 ﻿using Entities.General;
-using MethodsParameters.Input.Reports;
-using MethodsParameters.Input.Transaccion;
-using MethodsParameters.Output.Dispersion;
-using MethodsParameters.Output.Gateway;
-using MethodsParameters.Output.Transaccion;
+using Entities.Input.Reports;
+using Entities.Input.Transaccion;
+using Entities.Output.Dispersion;
+using Entities.Output.Gateway;
+using Entities.Output.Transaccion;
 using System;
 using System.Collections.Generic;
 using System.Linq;

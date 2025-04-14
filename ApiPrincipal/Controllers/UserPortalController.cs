@@ -2,7 +2,7 @@
 using Bussines;
 using Entities.General;
 using Interfaces.Bussines;
-using MethodsParameters.Input.PortalUser;
+using Entities.Input.PortalUser;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.IdentityModel.Tokens;

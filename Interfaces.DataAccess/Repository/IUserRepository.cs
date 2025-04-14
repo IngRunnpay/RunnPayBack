@@ -1,7 +1,7 @@
 ﻿using Entities.General;
-using MethodsParameters.Input.Otp;
-using MethodsParameters.Input.PortalUser;
-using MethodsParameters.Output.PortalUser;
+using Entities.Input.Otp;
+using Entities.Input.PortalUser;
+using Entities.Output.PortalUser;
 using System;
 using System.Collections.Generic;
 using System.Linq;

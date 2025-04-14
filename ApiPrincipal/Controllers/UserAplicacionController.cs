@@ -1,7 +1,7 @@
 ﻿using ApiPrincipal.Controllers;
 using ApiPrincipal.Routes;
 using Interfaces.Bussines;
-using MethodsParameters.Input;
+using Entities.Input;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 

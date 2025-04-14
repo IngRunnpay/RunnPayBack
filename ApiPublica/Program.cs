@@ -1,5 +1,6 @@
 
 using ApiPublica.Extensions;
+using Interfaces.DataAccess.Repository;
 using MethodsParameters.Client;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.Extensions.DependencyInjection;
@@ -63,6 +64,9 @@ namespace ApiPublica
             BePayClient.Usuario = builder.Configuration.GetSection("BePayClient:Usuario").Value;
             BePayClient.Contraseña = builder.Configuration.GetSection("BePayClient:Contraseña").Value;
             BePayClient.Account = builder.Configuration.GetSection("BePayClient:Id").Value;
+
+            LogShared._logRepository = builder.Services.BuildServiceProvider().GetService<ILogRepository>();
+
             app.Run();
 
         }

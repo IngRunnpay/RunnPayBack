@@ -1,6 +1,6 @@
 ﻿using Entities.General;
-using MethodsParameters.Input;
-using MethodsParameters.Input.Otp;
+using Entities.Input;
+using Entities.Input.Otp;
 using System;
 using System.Collections.Generic;
 using System.Linq;

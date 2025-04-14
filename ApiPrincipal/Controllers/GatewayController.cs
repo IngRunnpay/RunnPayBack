@@ -2,8 +2,8 @@
 using Bussines;
 using Entities.General;
 using Interfaces.Bussines;
-using MethodsParameters.Input.Gateway;
-using MethodsParameters.Input.Transaccion;
+using Entities.Input.Gateway;
+using Entities.Input.Transaccion;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 

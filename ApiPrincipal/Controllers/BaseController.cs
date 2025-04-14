@@ -3,7 +3,7 @@ using Entities.Enums;
 using Entities.General;
 using Interfaces.Bussines;
 using MethodsParameters;
-using MethodsParameters.Input;
+using Entities.Input;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +36,7 @@ namespace ApiPrincipal.Controllers
             try
             {
                 _logService.Logger(
-                        new MethodsParameters.Input.LogIn(
+                        new Entities.Input.LogIn(
                             "Registro interno json petición.",
                             HttpContext.Request.GetUri().ToString(),
                             JsonConvert.SerializeObject(input ?? new { }),
@@ -55,7 +55,7 @@ namespace ApiPrincipal.Controllers
             try
             {
                 await _logService.Logger(
-                    new MethodsParameters.Input.LogIn(ex)
+                    new Entities.Input.LogIn(ex)
                     {
                         IdUsuarioAplicacion = IdUsuario
                     }
@@ -80,7 +80,7 @@ namespace ApiPrincipal.Controllers
                 }
                 catch (Exception ex)
                 {
-                    _logService.Logger(new MethodsParameters.Input.LogIn(ex));
+                    _logService.Logger(new Entities.Input.LogIn(ex));
                     throw new CustomException("Autenticacion no valida.");
                 }
             }
@@ -99,7 +99,7 @@ namespace ApiPrincipal.Controllers
                 }
                 catch (Exception ex)
                 {
-                    _logService.Logger(new MethodsParameters.Input.LogIn(ex));
+                    _logService.Logger(new Entities.Input.LogIn(ex));
                     throw new CustomException("Autenticacion no valida.");
                 }
             }
@@ -119,7 +119,7 @@ namespace ApiPrincipal.Controllers
                 }
                 catch (Exception ex)
                 {
-                    _logService.Logger(new MethodsParameters.Input.LogIn(ex));
+                    _logService.Logger(new Entities.Input.LogIn(ex));
                     throw new CustomException("Autenticacion no valida.");
                 }
             }
@@ -139,7 +139,7 @@ namespace ApiPrincipal.Controllers
                 }
                 catch (Exception ex)
                 {
-                    _logService.Logger(new MethodsParameters.Input.LogIn(ex));
+                    _logService.Logger(new Entities.Input.LogIn(ex));
                     throw new CustomException("Autenticacion no valida.");
                 }
             }
@@ -162,7 +162,7 @@ namespace ApiPrincipal.Controllers
                 }
                 catch (Exception ex)
                 {
-                    _logService.Logger(new MethodsParameters.Input.LogIn(ex));
+                    _logService.Logger(new Entities.Input.LogIn(ex));
                     throw new CustomException("Autenticacion no valida.");
                 }
             }

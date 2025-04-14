@@ -3,8 +3,8 @@ using ApiPrincipal.Routes;
 using Bussines;
 using Entities.General;
 using Interfaces.Bussines;
-using MethodsParameters.Input.Dispersion;
-using MethodsParameters.Input.Transaccion;
+using Entities.Input.Dispersion;
+using Entities.Input.Transaccion;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 
