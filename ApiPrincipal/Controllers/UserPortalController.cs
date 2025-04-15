@@ -80,5 +80,62 @@ namespace ApiPrincipal.Controllers
             }
             return Ok(response);
         }
+        [HttpGet(RoutesPath.UserPortalController_PerfilPortal)]
+        [TypeFilter(typeof(AllowAnonymousFilter))]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
+        public async Task<ActionResult> PerfilPortal([FromQuery] string IdAplicacion)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(IdAplicacion))
+                {
+                    throw new CustomException("Campo no valido [IdAplicacion]");
+                }
+
+                ValidateAccess(RoutesPath.UserPortalController_PerfilPortal, new { });
+                response = await _UserPortalServices.PerfilPortal(IdAplicacion);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await LogError(ex);
+                response.CreateError(ex);
+            }
+            return Ok(response);
+        }
+        [HttpPost(RoutesPath.UserPortalController_PerfilUpdate)]
+        [TypeFilter(typeof(AllowAnonymousFilter))]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
+        public async Task<ActionResult> PerfilUpdate([FromBody] RequestPerfilUpdate request)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.IdAplicacion))
+                {
+                    throw new CustomException("Campo no valido [IdAplicacion]");
+                }
+                if (string.IsNullOrEmpty(request.UrlClient))
+                {
+                    throw new CustomException("Campo no valido [UrlClient]");
+                }
+                ValidateAccess(RoutesPath.UserPortalController_PerfilUpdate, new { });
+                response = await _UserPortalServices.PerfilUpdate(request);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await LogError(ex);
+                response.CreateError(ex);
+            }
+            return Ok(response);
+        }
     }
 }

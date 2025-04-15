@@ -40,6 +40,10 @@
         public const string UserPortalController = "UserPortal";
         public const string UserPortalController_LoginUser = Base + "/" + UserPortalController + "/LoginUser/";
         public const string UserPortalController_ValidOtp = Base + "/" + UserPortalController + "/ValidOtp/";
+        public const string UserPortalController_PerfilPortal = Base + "/" + UserPortalController + "/PerfilPortal/";
+        public const string UserPortalController_PerfilUpdate = Base + "/" + UserPortalController + "/PerfilUpdate/";
+
+
         #endregion
 
         #region ReportsController

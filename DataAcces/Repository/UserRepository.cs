@@ -36,8 +36,35 @@ namespace DataAccess.Repository
             parameters.Add("@Correo", Request.ToLower());
 
             ResponseSpGetUserByEmail result = await _helper.ExecuteStoreProcedureFirstOrDefault<ResponseSpGetUserByEmail>(connectionString, storedProcedure, parameters);
-           
+
             return result;
         }
+        public async Task<BaseResponse> PerfilPortal(string IdAplicacion)
+        {
+            BaseResponse response = new BaseResponse();
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Seguridad.Sp_GetPerfil]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdAplicacion", IdAplicacion);
+
+            var result = await _helper.ExecuteStoreProcedureFirstOrDefault<object>(connectionString, storedProcedure, parameters);
+            response.CreateSuccess("Ok", result);
+            return response;
+        }
+
+        public async Task<BaseResponse> PerfilUpdate(RequestPerfilUpdate request)
+        {
+            BaseResponse response = new BaseResponse();
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Seguridad.Sp_UpdatePerfil]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@Id",request.IdAplicacion);
+            parameters.Add("@NuevaUrl", request.UrlClient);
+
+            var result = await _helper.ExecuteStoreProcedureFirstOrDefault<object>(connectionString, storedProcedure, parameters);
+            response.CreateSuccess("Ok", result);
+            return response;
+        }
+
     }
 }

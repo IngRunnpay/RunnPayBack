@@ -13,6 +13,10 @@ namespace Interfaces.Bussines
     {
         Task<BaseResponse> LoginPortal(Login request);
         Task<BaseResponse> ValidOtp(RequestValidOtp request);
+        Task<BaseResponse> PerfilPortal(string IdAplicacion);
+        Task<BaseResponse> PerfilUpdate(RequestPerfilUpdate request);
+
+
 
     }
 }

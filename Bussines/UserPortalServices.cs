@@ -173,6 +173,43 @@ namespace Bussines
             return response;
         }
 
+        public async Task<BaseResponse> PerfilPortal(string IdAplicacion)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                response = await _userRepository.PerfilPortal(IdAplicacion);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse> PerfilUpdate(RequestPerfilUpdate request)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                response = await _userRepository.PerfilUpdate(request);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+            return response;
+        }
         #endregion
 
         #region Privado
@@ -200,4 +237,5 @@ namespace Bussines
 
         #endregion
     }
+
 }
