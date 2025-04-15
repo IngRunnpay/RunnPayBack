@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Azure.Core;
 using Newtonsoft.Json.Linq;
 using MethodsParameters.Client;
+using System.Threading.Channels;
 
 namespace ECD.Utilidades.Recursos
 {
@@ -25,6 +26,8 @@ namespace ECD.Utilidades.Recursos
 
             using (var stringContent = new StringContent(jsonRequest.ToString(), Encoding.UTF8, "application/json"))
             {
+                LogShared.LogDataDetail(url, Client.BaseAddress.ToString(), stringContent.ToString(), "GetAsync");
+
                 var response = Client.GetAsync(Client.BaseAddress).Result;
 
                 if (!response.IsSuccessStatusCode)
@@ -33,12 +36,13 @@ namespace ECD.Utilidades.Recursos
                 }
 
                 var responseString = response.Content.ReadAsStringAsync().Result;
+                LogShared.LogDataDetail(url, Client.BaseAddress.ToString(), responseString.ToString(), "GetAsync");
+
                 return JsonConvert.DeserializeObject<T>(responseString);
             }
         }
         public async Task<T> PostAsync<T>(string url, object request, string username = null, string password = null, string channel = null)
         {
-            //LogShared.LogDataDetail(url)
             CreateNewInstanClient();
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
@@ -53,6 +57,8 @@ namespace ECD.Utilidades.Recursos
 
             using (var stringContent = new StringContent(jsonRequest.ToString(), Encoding.UTF8, "application/json"))
             {
+                LogShared.LogDataDetail(url, Client.BaseAddress.ToString(), JsonConvert.SerializeObject(request), channel);
+
                 var response = Client.PostAsync(Client.BaseAddress, stringContent).Result;
 
                 if (!response.IsSuccessStatusCode)
@@ -61,6 +67,8 @@ namespace ECD.Utilidades.Recursos
                 }
 
                 var responseString = response.Content.ReadAsStringAsync().Result;
+                LogShared.LogDataDetail(url, Client.BaseAddress.ToString(), responseString, channel);
+
 
                 return JsonConvert.DeserializeObject<T>(responseString);
             }
@@ -88,6 +96,8 @@ namespace ECD.Utilidades.Recursos
 
             Client.BaseAddress = new Uri(url);
             var jsonRequest = JsonConvert.SerializeObject(request);
+            LogShared.LogDataDetail(url, Client.BaseAddress.ToString(), jsonRequest.ToString(), "RestBearer");
+
 
             using (var stringContent = new StringContent(jsonRequest.ToString(), Encoding.UTF8, "application/json"))
             {
@@ -99,6 +109,8 @@ namespace ECD.Utilidades.Recursos
                     return JsonConvert.DeserializeObject<T>(obj);
                 }
                 var responseString = response.Content.ReadAsStringAsync().Result;
+                LogShared.LogDataDetail(url, Client.BaseAddress.ToString(), responseString.ToString(), "RestBearer");
+
                 return JsonConvert.DeserializeObject<T>(responseString);
             }
         }
@@ -127,6 +139,7 @@ namespace ECD.Utilidades.Recursos
 
                 Client.BaseAddress = new Uri(url);
                 var jsonRequest = JsonConvert.SerializeObject(request);
+                LogShared.LogDataDetail(url, Client.BaseAddress.ToString(), jsonRequest.ToString(), "GetAsync");
 
                 using (var stringContent = new StringContent(jsonRequest.ToString(), Encoding.UTF8, "application/json"))
                 {
@@ -139,6 +152,7 @@ namespace ECD.Utilidades.Recursos
 
                     var responseString = response.Content.ReadAsStringAsync().Result;
                     var result = JsonConvert.DeserializeObject<T>(responseString);
+                    LogShared.LogDataDetail(url, Client.BaseAddress.ToString(), result.ToString(), "GetAsync");
 
                     return result;
                 }

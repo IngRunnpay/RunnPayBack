@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace MethodsParameters.Client
@@ -27,6 +28,8 @@ namespace MethodsParameters.Client
         private static async Task Login ()
         {
             ConsumeExternalServices ResponseExternal = new ConsumeExternalServices();
+            LogShared.LogDataDetail("Login", "", Usuario, Contraseña);
+
             ResponseLogin response = await ResponseExternal.PostAsync<ResponseLogin>(UrlClient + "/api/v1/get-access-token", new
             {
                 email = Usuario,
@@ -56,7 +59,10 @@ namespace MethodsParameters.Client
             try
             {
                 Login().Wait();
+                LogShared.LogDataDetail("CreateTransaction", "", JsonConvert.SerializeObject(ObjRequest), CurrentToken);
                 BaseResponseBpay response = await responseExternal.RestBearer<BaseResponseBpay>(UrlClient + "/api/v1/checkout/transactions", ObjRequest, CurrentToken, "BePay");
+                LogShared.LogDataDetail("CreateTransaction", "", JsonConvert.SerializeObject(response), CurrentToken);
+
                 if (response != null)
                 {
                     if (response.success)
@@ -97,6 +103,8 @@ namespace MethodsParameters.Client
                 }
                 else
                 {
+                    LogShared.LogDataDetail("NequiPush", $"token: {TokenTransaccion}", JsonConvert.SerializeObject(ObjRequest), CurrentToken);
+
                     ConsumeExternalServices responseExternal = new ConsumeExternalServices();
                     var restBearer = responseExternal.RestBearer<BaseResponseBpay>(UrlClient + "/api/v1/checkout/checkoutNequiPush", ObjRequest, CurrentToken, "BePay");
                     restBearer.Wait();

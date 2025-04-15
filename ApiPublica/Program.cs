@@ -22,10 +22,10 @@ namespace ApiPublica
             builder.Services.AddAuthorization();
             builder.Services.CongifureSwagger();
             builder.Services.AddControllers();
-            builder.WebHost.ConfigureKestrel(serverOptions =>
-            {
-                serverOptions.Configure(builder.Configuration.GetSection("Kestrel"));
-            });
+            //builder.WebHost.ConfigureKestrel(serverOptions =>
+            //{
+            //    serverOptions.Configure(builder.Configuration.GetSection("Kestrel"));
+            //});
 
             var app = builder.Build();
             
@@ -62,7 +62,7 @@ namespace ApiPublica
             TpagaClient.TokenClient = builder.Configuration.GetSection("TpagaClient:Token").Value;
             BePayClient.UrlClient = builder.Configuration.GetSection("BePayClient:Url").Value;
             BePayClient.Usuario = builder.Configuration.GetSection("BePayClient:Usuario").Value;
-            BePayClient.Contraseña = builder.Configuration.GetSection("BePayClient:Contraseña").Value;
+            BePayClient.Contraseña = builder.Configuration.GetSection("BePayClient:Contrasena").Value;
             BePayClient.Account = builder.Configuration.GetSection("BePayClient:Id").Value;
 
             LogShared._logRepository = builder.Services.BuildServiceProvider().GetService<ILogRepository>();
