@@ -17,6 +17,7 @@ namespace Interfaces.DataAccess.Repository
         Task<ResponseSpLogPasarelaExterna> LoggExternalPasarela(SpLogPasarelaExterna Request);
         Task<bool> LogLinKPSEExternalPasarela(SpLogLinkPSEPasarelas Request);
         Task<string> GetLinkPSEExternalPasarela(int IdTransaccion);
+        Task Loghttps(string tipo, string ruta, string request, string response);
 
 
     }

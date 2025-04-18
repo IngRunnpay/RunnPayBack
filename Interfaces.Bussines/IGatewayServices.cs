@@ -12,7 +12,7 @@ namespace Interfaces.Bussines
 {
     public interface IGatewayServices
     {
-        Task<BaseResponse> GatewayStarter(RequestQuicklyStarter ObjRequest, string Endpoint);
+        Task<BaseResponse> GatewayStarter(object ObjRequest, string Endpoint);
         Task<BaseResponse> GatewayBank(string Endpoint, string token);
         Task<BaseResponse> GatewayGetDataTransaction(string IdTransaccion); 
         Task<BaseResponse> GatewayController_ResumePay(string IdTransaccion);

@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using static MethodsParameters.Utilities;
+using Azure.Core;
 
 namespace Bussines
 {
@@ -203,6 +204,60 @@ namespace Bussines
                 var resp = await _iTransactionRepository.GetBancosPSE();
 
                 response.CreateSuccess("OK", resp.Data);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+            return response;
+        }
+        public async Task<BaseResponse> PayInConsiliation(RequestPayInConsiliation request)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                response = await _iTransactionRepository.PayInConsiliation(request);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+            return response;
+        }
+        public async Task<BaseResponse> PayInConsiliationExcel(RequestPayInConsiliationExcel request)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                response = await _iTransactionRepository.PayInConsiliationExcel(request);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+            return response;
+        }
+        public async Task<BaseResponse> DataComision(RequestDataComision request)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                response = await _iTransactionRepository.DataComision(request);
             }
             catch (CustomException ex)
             {

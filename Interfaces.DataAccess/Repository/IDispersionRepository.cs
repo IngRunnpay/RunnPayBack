@@ -23,6 +23,8 @@ namespace Interfaces.DataAccess.Repository
         Task<ResponseGetPyOut> GetDispersionXReferencia(string referencia, string IdAplicacion);
         Task<ReponseGetClientConfig> GetConfigClient(string IdAplicacion);
         Task<BaseResponse> Dispersion(RequestSpDispersion request);
+        Task<BaseResponse> PayOutConsiliation(RequestPayOutConsiliation request);
+        Task<BaseResponse> PayOutConsiliationExcel(RequestPayOutConsiliationExcel request);
 
     }
 }

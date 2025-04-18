@@ -26,7 +26,7 @@ namespace ApiPrincipal.Controllers
         [HttpPost(RoutesPath.GatewayController_GatewayStarter)]
         [TypeFilter(typeof(AllowAnonymousFilter))]
         [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
-        public async Task<ActionResult> GatewayStarter([FromBody] RequestQuicklyStarter ObjRequest)
+        public async Task<ActionResult> GatewayStarter([FromBody] object ObjRequest)
         {
             BaseResponse response = new BaseResponse();
             try

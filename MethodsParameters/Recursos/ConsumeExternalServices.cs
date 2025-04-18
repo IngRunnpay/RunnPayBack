@@ -32,10 +32,13 @@ namespace ECD.Utilidades.Recursos
 
                 if (!response.IsSuccessStatusCode)
                 {
+                    LogShared.Loghttps("GetAsync", url, JsonConvert.SerializeObject(request), JsonConvert.SerializeObject(response.Content.ReadAsStringAsync().Result));
+
                     return JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);
                 }
 
                 var responseString = response.Content.ReadAsStringAsync().Result;
+                LogShared.Loghttps("GetAsync", url, JsonConvert.SerializeObject(request), JsonConvert.SerializeObject(responseString));
                 LogShared.LogDataDetail(url, Client.BaseAddress.ToString(), responseString.ToString(), "GetAsync");
 
                 return JsonConvert.DeserializeObject<T>(responseString);
@@ -58,15 +61,14 @@ namespace ECD.Utilidades.Recursos
             using (var stringContent = new StringContent(jsonRequest.ToString(), Encoding.UTF8, "application/json"))
             {
                 LogShared.LogDataDetail(url, Client.BaseAddress.ToString(), JsonConvert.SerializeObject(request), channel);
-
                 var response = Client.PostAsync(Client.BaseAddress, stringContent).Result;
-
                 if (!response.IsSuccessStatusCode)
                 {
+                    LogShared.Loghttps("PostAsync", url, JsonConvert.SerializeObject(request), JsonConvert.SerializeObject(response.Content.ReadAsStringAsync().Result));
                     return JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);
                 }
-
                 var responseString = response.Content.ReadAsStringAsync().Result;
+                LogShared.Loghttps("PostAsync", url, JsonConvert.SerializeObject(request), JsonConvert.SerializeObject(responseString));
                 LogShared.LogDataDetail(url, Client.BaseAddress.ToString(), responseString, channel);
 
 
@@ -106,9 +108,12 @@ namespace ECD.Utilidades.Recursos
                 if (!response.IsSuccessStatusCode)
                 {
                     var obj = response.Content.ReadAsStringAsync().Result;
+                    LogShared.Loghttps("RestBearer|PostAsync", url, JsonConvert.SerializeObject(request), JsonConvert.SerializeObject(obj));
+
                     return JsonConvert.DeserializeObject<T>(obj);
                 }
                 var responseString = response.Content.ReadAsStringAsync().Result;
+                LogShared.Loghttps("RestBearer|PostAsync", url, JsonConvert.SerializeObject(request), JsonConvert.SerializeObject(responseString));
                 LogShared.LogDataDetail(url, Client.BaseAddress.ToString(), responseString.ToString(), "RestBearer");
 
                 return JsonConvert.DeserializeObject<T>(responseString);
@@ -147,11 +152,14 @@ namespace ECD.Utilidades.Recursos
 
                     if (!response.IsSuccessStatusCode)
                     {
+                        LogShared.Loghttps("GetAsync|155", url, JsonConvert.SerializeObject(request), JsonConvert.SerializeObject(response.Content.ReadAsStringAsync().Result));
+
                         return JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);
                     }
 
                     var responseString = response.Content.ReadAsStringAsync().Result;
                     var result = JsonConvert.DeserializeObject<T>(responseString);
+                    LogShared.Loghttps("GetAsync|162", url, JsonConvert.SerializeObject(request), JsonConvert.SerializeObject(responseString));
                     LogShared.LogDataDetail(url, Client.BaseAddress.ToString(), result.ToString(), "GetAsync");
 
                     return result;

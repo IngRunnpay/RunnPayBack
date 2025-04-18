@@ -39,5 +39,18 @@ namespace DataAccess.Repository
            
             return result;
         }
+
+        public async Task<BaseResponse> ConfigPayIN(string IdAplicacion)
+        {
+            BaseResponse response = new BaseResponse();
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Transaccion.SP_PayinMedioPago]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdAplicacion", IdAplicacion);
+
+            var result = await _helper.ExecuteStoreProcedureGet<object>(connectionString, storedProcedure, parameters);
+            response.CreateSuccess("Ok", result);
+            return response;
+        }
     }
 }

@@ -19,5 +19,8 @@ namespace Interfaces.Bussines
         Task<BaseResponse> DataDispersion(string IdAplicacion, int idDispersion);
         Task<BaseResponse> BilleteraCliente(string IdAplicacion);
         Task<BaseResponse> Dispersion(RequestSpDispersion request);
+        Task<BaseResponse> ConfigPayOut(string IdAplicacion);
+        Task<BaseResponse> PayOutConsiliation(RequestPayOutConsiliation request);
+        Task<BaseResponse> PayOutConsiliationExcel(RequestPayOutConsiliationExcel request);
     }
 }

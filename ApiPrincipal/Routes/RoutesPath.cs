@@ -40,19 +40,26 @@
         public const string UserPortalController = "UserPortal";
         public const string UserPortalController_LoginUser = Base + "/" + UserPortalController + "/LoginUser/";
         public const string UserPortalController_ValidOtp = Base + "/" + UserPortalController + "/ValidOtp/";
+        public const string UserPortalController_ConfigPayOt = Base + "/" + UserPortalController + "/ConfigPayOut/";
+        public const string UserPortalController_ConfigPayIN = Base + "/" + UserPortalController + "/ConfigPayIN/";
+
         #endregion
 
         #region ReportsController
         public const string ReportsController = "Reports";
         public const string ReportsController_Transactions = Base + "/" + ReportsController + "/Transactions/";
         public const string ReportsController_Dispersion = Base + "/" + ReportsController + "/Dispersion/";
+        public const string ReportsController_PayInConsiliation = Base + "/" + ReportsController + "/PayInConsiliation/";
+        public const string ReportsController_PayInConsiliationExcel = Base + "/" + ReportsController + "/PayInConsiliationExcel/";
+        public const string ReportsController_PayOutConsiliation = Base + "/" + ReportsController + "/PayOutConsiliation/";
+        public const string ReportsController_PayOutConsiliationExcel = Base + "/" + ReportsController + "/PayOutConsiliationExcel/";
+        public const string ReportsController_DataComision = Base + "/" + ReportsController + "/DataComision/";
 
         #endregion
         #region DispersionController
-        public const string DispersionController = "Dispersion";
+        public const string DispersionController = "Dispersion"; 
         public const string DispersionController_Desicion = Base + "/" + DispersionController + "/Desicion/";
         public const string DispersionController_BilleteraCliente = Base + "/" + DispersionController + "/BilleteraCliente/";
-
         #endregion
     }
 }

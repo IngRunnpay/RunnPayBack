@@ -13,6 +13,7 @@ namespace Interfaces.DataAccess.Repository
     public interface IUserRepository
     {
         Task<ResponseSpGetUserByEmail> GetUserByEmail(string Request);
+        Task<BaseResponse> ConfigPayIN(string IdAplicacion);
 
     }
 }

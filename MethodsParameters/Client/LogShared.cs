@@ -18,5 +18,16 @@ namespace MethodsParameters.Client
             }
             catch { }
         }
+        public static async Task Loghttps(string tipo, string ruta, string request, string response)
+        {
+            try
+            {
+                if (_logRepository != null)
+                {
+                    await _logRepository.Loghttps(tipo, ruta, request, response);
+                }
+            }
+            catch { }
+        }
     }
 }

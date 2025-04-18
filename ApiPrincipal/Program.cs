@@ -69,6 +69,7 @@ namespace ApiPrincipal
             BePayClient.Usuario = builder.Configuration.GetSection("BePayClient:Usuario").Value;
             BePayClient.Contraseña = builder.Configuration.GetSection("BePayClient:Contrasena").Value;
             BePayClient.Account = builder.Configuration.GetSection("BePayClient:Id").Value;
+            LogShared._logRepository = builder.Services.BuildServiceProvider().GetService<ILogRepository>();
 
             app.Run();
 

@@ -173,6 +173,25 @@ namespace Bussines
             return response;
         }
 
+        public async Task<BaseResponse> ConfigPayIN(string IdAplicacion)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                response = await _userRepository.ConfigPayIN(IdAplicacion);
+
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+            return response;
+        }
         #endregion
 
         #region Privado

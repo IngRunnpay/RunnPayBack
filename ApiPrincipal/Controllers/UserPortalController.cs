@@ -16,12 +16,15 @@ namespace ApiPrincipal.Controllers
     public class UserPortalController : BaseController
     {
         private readonly IUserPortalServices _UserPortalServices;
+        private readonly IDispersionServices _DispersionServices;
         public UserPortalController(
              ILogService logService,
              IConfiguration config,
-             IUserPortalServices userPortalServices) : base(logService, config)
+             IUserPortalServices userPortalServices,
+             IDispersionServices dispersionServices) : base(logService, config)
         {
             _UserPortalServices = userPortalServices;
+            _DispersionServices = dispersionServices;
         }
 
         [HttpPost(RoutesPath.UserPortalController_LoginUser)]
@@ -68,6 +71,54 @@ namespace ApiPrincipal.Controllers
                 }
                 ValidateAccess(RoutesPath.UserPortalController_ValidOtp, new { });
                 response = await _UserPortalServices.ValidOtp(request);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await LogError(ex);
+                response.CreateError(ex);
+            }
+            return Ok(response);
+        }
+
+        [HttpGet(RoutesPath.UserPortalController_ConfigPayOt)]
+        [TypeFilter(typeof(AllowAnonymousFilter))]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
+        public async Task<ActionResult> ConfigPayOut([FromQuery] string IdAplicacion)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                ValidateAccess(RoutesPath.UserPortalController_ConfigPayOt, new { });
+
+                response = await _DispersionServices.ConfigPayOut(IdAplicacion);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await LogError(ex);
+                response.CreateError(ex);
+            }
+            return Ok(response);
+        }
+
+        [HttpGet(RoutesPath.UserPortalController_ConfigPayIN)]
+        [TypeFilter(typeof(AllowAnonymousFilter))]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
+        public async Task<ActionResult> ConfigPayIN([FromQuery] string IdAplicacion)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                ValidateAccess(RoutesPath.UserPortalController_ConfigPayIN, new { });
+
+                response = await _UserPortalServices.ConfigPayIN(IdAplicacion);
             }
             catch (CustomException ex)
             {

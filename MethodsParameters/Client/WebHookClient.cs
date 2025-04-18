@@ -2,6 +2,7 @@
 using Entities.Input.Gateway;
 using Entities.Input.Webhook;
 using Entities.Output.Gateway;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,9 @@ namespace MethodsParameters.Client
             {
                 ConsumeExternalServices responseExternal = new ConsumeExternalServices();
                 var restBearer = responseExternal.RestBearer<object>(urlClient, ObjRequest);
+                LogShared.Loghttps("WebHook", urlClient, JsonConvert.SerializeObject(ObjRequest), JsonConvert.SerializeObject(restBearer.Result));
+                LogShared.Loghttps("WebHook", urlClient, JsonConvert.SerializeObject(ObjRequest), JsonConvert.SerializeObject(restBearer));
+
                 restBearer.Wait();
                 response = restBearer.Result;
 

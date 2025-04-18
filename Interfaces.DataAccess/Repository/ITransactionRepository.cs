@@ -30,7 +30,9 @@ namespace Interfaces.DataAccess.Repository
         Task<BaseResponse> GetMetodPagoXUsuario(int IdTransaccion);
         Task<BaseResponse> UpdateBePay(int IdTransaccion, int IdMedioPago);
         Task<ReponseFullDataTransaction> FullDataTransaction(int IdTransaccion);
-
+        Task<BaseResponse> PayInConsiliation(RequestPayInConsiliation request);
+        Task<BaseResponse> PayInConsiliationExcel(RequestPayInConsiliationExcel request);
+        Task<BaseResponse> DataComision(RequestDataComision request);
 
     }
 }

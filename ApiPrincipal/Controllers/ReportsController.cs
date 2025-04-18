@@ -106,5 +106,157 @@ namespace ApiPrincipal.Controllers
             }
             return Ok(response);
         }
+        
+        [HttpPost(RoutesPath.ReportsController_PayInConsiliation)]
+        [TypeFilter(typeof(AllowAnonymousFilter))]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
+        public async Task<ActionResult> PayInConsiliation([FromBody] RequestPayInConsiliation request)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.IdAplicacion))
+                {
+                    throw new CustomException("Campo no valido [IdAplicacion]");
+                }
+                if (request.Ini <= 0)
+                {
+                    throw new CustomException("Campo no valido [Ini]");
+
+                }
+                if (request.Fin <= 0)
+                {
+                    throw new CustomException("Campo no valido [Fin]");
+
+                }
+                ValidateAccess(RoutesPath.ReportsController_PayInConsiliation, new { });
+                response = await _TransactionServices.PayInConsiliation(request);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await LogError(ex);
+                response.CreateError(ex);
+            }
+            return Ok(response);
+        }
+        [HttpPost(RoutesPath.ReportsController_PayInConsiliationExcel)]
+        [TypeFilter(typeof(AllowAnonymousFilter))]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
+        public async Task<ActionResult> PayInConsiliationExcel([FromBody] RequestPayInConsiliationExcel request)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.IdAplicacion))
+                {
+                    throw new CustomException("Campo no valido [IdAplicacion]");
+                }
+                ValidateAccess(RoutesPath.ReportsController_PayInConsiliationExcel, new { });
+                response = await _TransactionServices.PayInConsiliationExcel(request);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await LogError(ex);
+                response.CreateError(ex);
+            }
+            return Ok(response);
+        }
+        [HttpPost(RoutesPath.ReportsController_PayOutConsiliation)]
+        [TypeFilter(typeof(AllowAnonymousFilter))]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
+        public async Task<ActionResult> PayOutConsiliation([FromBody] RequestPayOutConsiliation request)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.IdAplicacion))
+                {
+                    throw new CustomException("Campo no valido [IdAplicacion]");
+                }
+                if (request.Ini <= 0)
+                {
+                    throw new CustomException("Campo no valido [Ini]");
+
+                }
+                if (request.Fin <= 0)
+                {
+                    throw new CustomException("Campo no valido [Fin]");
+
+                }
+                ValidateAccess(RoutesPath.ReportsController_PayInConsiliation, new { });
+                response = await _DispersionServices.PayOutConsiliation(request);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await LogError(ex);
+                response.CreateError(ex);
+            }
+            return Ok(response);
+        }
+
+        [HttpPost(RoutesPath.ReportsController_PayOutConsiliationExcel)]
+        [TypeFilter(typeof(AllowAnonymousFilter))]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
+        public async Task<ActionResult> PayOutConsiliationExcel([FromBody] RequestPayOutConsiliationExcel request)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.IdAplicacion))
+                {
+                    throw new CustomException("Campo no valido [IdAplicacion]");
+                }
+                ValidateAccess(RoutesPath.ReportsController_PayOutConsiliationExcel, new { });
+                response = await _DispersionServices.PayOutConsiliationExcel(request);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await LogError(ex);
+                response.CreateError(ex);
+            }
+            return Ok(response);
+        }
+        [HttpPost(RoutesPath.ReportsController_DataComision)]
+        [TypeFilter(typeof(AllowAnonymousFilter))]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
+        public async Task<ActionResult> DataComision([FromBody] RequestDataComision request)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.IdAplicacion))
+                {
+                    throw new CustomException("Campo no valido [IdAplicacion]");
+                }
+                ValidateAccess(RoutesPath.ReportsController_DataComision, new { });
+                response = await _TransactionServices.DataComision(request);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await LogError(ex);
+                response.CreateError(ex);
+            }
+            return Ok(response);
+        }
     }
 }

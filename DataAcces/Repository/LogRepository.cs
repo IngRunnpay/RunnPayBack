@@ -58,7 +58,6 @@ namespace DataAccess.Repository
             parameters.Add("@Enviada", Request.Enviada);
 
 
-
             var result = await _helper.ExecuteStoreProcedureFirstOrDefault<ResponseSpLogPasarelaExterna>(connectionString, storedProcedure, parameters);
             
             return result;
@@ -89,6 +88,19 @@ namespace DataAccess.Repository
 
             return result;
         }
-        
+
+        public async Task Loghttps(string tipo, string ruta, string request, string response)
+        {
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[log.Sp_InsertConsumoHttps]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@Tipo", tipo);
+            parameters.Add("@Ruta", ruta);
+            parameters.Add("@Request", request);
+            parameters.Add("@Response", response);
+
+            await _helper.ExecuteStoreProcedureFirstOrDefault<object>(connectionString, storedProcedure, parameters);
+
+        }
     }
 }

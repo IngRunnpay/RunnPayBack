@@ -18,8 +18,10 @@ namespace Interfaces.Bussines
         Task<BaseResponse> Estadotransaccion(SpGetHistoriTransaction Request); 
         Task<BaseResponse> Resporttransaction(RequestSpTransactions request);
         Task<BaseResponse> Balance(string request);
-        Task<BaseResponse> GatewayBank();      
-
+        Task<BaseResponse> GatewayBank();
+        Task<BaseResponse> PayInConsiliation(RequestPayInConsiliation request);
+        Task<BaseResponse> PayInConsiliationExcel(RequestPayInConsiliationExcel request);
+        Task<BaseResponse> DataComision(RequestDataComision request);
 
     }
 }

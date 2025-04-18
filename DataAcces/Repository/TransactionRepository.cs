@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace DataAccess.Repository
 {
@@ -265,6 +266,49 @@ namespace DataAccess.Repository
             ReponseFullDataTransaction result = await _helper.ExecuteStoreProcedureFirstOrDefault<ReponseFullDataTransaction>(connectionString, storedProcedure, parameters);
      
             return result;
+        }
+
+        public async Task<BaseResponse> PayInConsiliation(RequestPayInConsiliation request)
+        {
+            BaseResponse response = new BaseResponse();
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Liquidacion.Sp_ConciliationPAYIN]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdAplicacion", request.IdAplicacion);
+            parameters.Add("@Fecha", request.Fecha);
+            parameters.Add("@Ini", request.Ini);
+            parameters.Add("@Fin", request.Fin);
+
+            var result = await _helper.ExecuteStoreProcedureGet<object>(connectionString, storedProcedure, parameters);
+            response.CreateSuccess("OK", result);
+            return response;
+        }
+        public async Task<BaseResponse> PayInConsiliationExcel(RequestPayInConsiliationExcel request)
+        {
+            BaseResponse response = new BaseResponse();
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Liquidacion.Sp_ExcelReportDayConciliationPAYIN]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdAplicacion", request.IdAplicacion);
+            parameters.Add("@FechaIni", request.FechaIni);
+            parameters.Add("@FechaFIn", request.FechaFin);
+
+            var result = await _helper.ExecuteStoreProcedureGet<object>(connectionString, storedProcedure, parameters);
+            response.CreateSuccess("OK", result);
+            return response;
+        }
+        public async Task<BaseResponse> DataComision(RequestDataComision request)
+        {
+            BaseResponse response = new BaseResponse();
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Liquidacion.Sp_GetDayDataPayment]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdAplicacion", request.IdAplicacion);
+            parameters.Add("@Fecha", request.Fecha);
+
+            var result = await _helper.ExecuteStoreProcedureFirstOrDefault<object>(connectionString, storedProcedure, parameters);
+            response.CreateSuccess("OK", result);
+            return response;
         }
     }
 }

@@ -363,5 +363,60 @@ namespace Bussines
             }
             return response;
         }
+        public async Task<BaseResponse> ConfigPayOut(string IdAplicacion)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                ReponseGetClientConfig ReponseConfig = await _DispersionRepository.GetConfigClient(IdAplicacion);
+                response.CreateSuccess("OK", ReponseConfig);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+            return response;
+        }
+        public async Task<BaseResponse> PayOutConsiliation(RequestPayOutConsiliation request)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                response = await _DispersionRepository.PayOutConsiliation(request);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+            return response;
+        }       
+        public async Task<BaseResponse> PayOutConsiliationExcel(RequestPayOutConsiliationExcel request)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                response = await _DispersionRepository.PayOutConsiliationExcel(request);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+            return response;
+        }
     }
 }

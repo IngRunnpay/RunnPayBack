@@ -14,6 +14,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.Output.Transaccion;
 
 namespace DataAccess.Repository
 {
@@ -218,6 +219,33 @@ namespace DataAccess.Repository
 
             return response;
         }
+        public async Task<BaseResponse> PayOutConsiliation(RequestPayOutConsiliation request)
+        {
+            BaseResponse response = new BaseResponse();
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Liquidacion.Sp_ConciliationPAYOUT]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdAplicacion", request.IdAplicacion);
+            parameters.Add("@Fecha", request.Fecha);
+            parameters.Add("@Ini", request.Ini);
+            parameters.Add("@Fin", request.Fin);
 
+            var result = await _helper.ExecuteStoreProcedureGet<object>(connectionString, storedProcedure, parameters);
+            response.CreateSuccess("OK", result);
+            return response;
+        }
+        public async Task<BaseResponse> PayOutConsiliationExcel(RequestPayOutConsiliationExcel request)
+        {
+            BaseResponse response = new BaseResponse();
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Liquidacion.Sp_ExcelReportDayConciliationPAYOUT]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdAplicacion", request.IdAplicacion);
+            parameters.Add("@FechaIni", request.FechaIni);
+            parameters.Add("@FechaFIn", request.FechaFin);
+            var result = await _helper.ExecuteStoreProcedureGet<object>(connectionString, storedProcedure, parameters);
+            response.CreateSuccess("OK", result);
+            return response;
+        }
     }
 }
