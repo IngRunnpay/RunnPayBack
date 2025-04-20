@@ -293,42 +293,35 @@ namespace Bussines
 
                         ResponseSpLog = await _logRepository.LoggExternalPasarela(ObjSpRequest);
                         int EstadoAnterior = ResponseSpLog.IdEstadoTransaccion;
-                        if (EstadoAnterior == (int)enumEstadoTransaccion.Pendiente || EstadoAnterior == (int)enumEstadoTransaccion.PendienteConfirmacionPago)
+                        ActualizarEstadoTransaccion ActualizarEstado = new ActualizarEstadoTransaccion();
+                        ActualizarEstado.IdTransaccion = ResponseSpLog.IdTransaccion;
+                        if (resp.data.status.ToUpper() != "PENDING")
                         {
-                            ActualizarEstadoTransaccion ActualizarEstado = new ActualizarEstadoTransaccion();
-                            ActualizarEstado.IdTransaccion = ResponseSpLog.IdTransaccion;
-                            if (resp.data.status.ToUpper() != "PENDING")
+                            switch (resp.data.status.ToUpper())
                             {
-                                switch (resp.data.status.ToUpper())
-                                {
-                                    case "APPROVED":
-                                        ActualizarEstado.idEstadoTransaccio = (int)enumEstadoTransaccion.Aprobado;
-                                        break;
-                                    case "REJECTED":
-                                        ActualizarEstado.idEstadoTransaccio = (int)enumEstadoTransaccion.Rechazado;
-                                        break;
-                                }
-
-                                await _TransactionRepository.UpdateTransaction(ActualizarEstado);
-
-                                ResponseSpDataWebHook ObjResponseDataWeb = await _TransactionRepository.GetDataWebHook(ObjSpRequest.IdTransaccion);
-                                if (!string.IsNullOrEmpty(ObjResponseDataWeb.UrlDelivery))
-                                {
-                                    RequesWebHook ObjWeb = new RequesWebHook();
-                                    ObjWeb.idTransaccion = OperacionEncriptacion.EncryptString(ObjResponseDataWeb.IdTransaccion.ToString(), ObjResponseDataWeb.UserName, ObjResponseDataWeb.Id);
-                                    ObjWeb.descripcionEstado = OperacionEncriptacion.EncryptString(ObjResponseDataWeb.Descripcion, ObjResponseDataWeb.UserName, ObjResponseDataWeb.Id);
-                                    ObjWeb.idEstado = OperacionEncriptacion.EncryptString(ObjResponseDataWeb.IdEstadoTransaccion.ToString(), ObjResponseDataWeb.UserName, ObjResponseDataWeb.Id);
-                                    ObjWeb.mensaje = OperacionEncriptacion.EncryptString(ObjResponseDataWeb.Mensaje, ObjResponseDataWeb.UserName, ObjResponseDataWeb.Id);
-                                    WebHookClient.SendClientWebhook(ObjResponseDataWeb.UrlDelivery, ObjWeb);
-                                }
+                                case "APPROVED":
+                                    ActualizarEstado.idEstadoTransaccio = (int)enumEstadoTransaccion.Aprobado;
+                                    break;
+                                case "REJECTED":
+                                    ActualizarEstado.idEstadoTransaccio = (int)enumEstadoTransaccion.Rechazado;
+                                    break;
                             }
 
-                            response.CreateSuccess("OK", new { });
+                            await _TransactionRepository.UpdateTransaction(ActualizarEstado);
+
+                            ResponseSpDataWebHook ObjResponseDataWeb = await _TransactionRepository.GetDataWebHook(ObjSpRequest.IdTransaccion);
+                            if (!string.IsNullOrEmpty(ObjResponseDataWeb.UrlDelivery))
+                            {
+                                RequesWebHook ObjWeb = new RequesWebHook();
+                                ObjWeb.idTransaccion = OperacionEncriptacion.EncryptString(ObjResponseDataWeb.IdTransaccion.ToString(), ObjResponseDataWeb.UserName, ObjResponseDataWeb.Id);
+                                ObjWeb.descripcionEstado = OperacionEncriptacion.EncryptString(ObjResponseDataWeb.Descripcion, ObjResponseDataWeb.UserName, ObjResponseDataWeb.Id);
+                                ObjWeb.idEstado = OperacionEncriptacion.EncryptString(ObjResponseDataWeb.IdEstadoTransaccion.ToString(), ObjResponseDataWeb.UserName, ObjResponseDataWeb.Id);
+                                ObjWeb.mensaje = OperacionEncriptacion.EncryptString(ObjResponseDataWeb.Mensaje, ObjResponseDataWeb.UserName, ObjResponseDataWeb.Id);
+                                WebHookClient.SendClientWebhook(ObjResponseDataWeb.UrlDelivery, ObjWeb);
+                            }
                         }
-                        else
-                        {
-                            response.CreateError("La transacción ya fue rechazada o aprobada.");
-                        }
+
+                        response.CreateSuccess("OK", new { });
                     }
                     else
                     {

@@ -21,7 +21,7 @@ namespace MethodsParameters.Client
             {
                 ConsumeExternalServices responseExternal = new ConsumeExternalServices();
                 var restBearer = responseExternal.RestBearer<object>(urlClient, ObjRequest);
-                LogShared.Loghttps("WebHook", urlClient, JsonConvert.SerializeObject(ObjRequest), JsonConvert.SerializeObject(restBearer.Result));
+                //LogShared.Loghttps("WebHook", urlClient, JsonConvert.SerializeObject(ObjRequest), JsonConvert.SerializeObject(restBearer.Result));
                 LogShared.Loghttps("WebHook", urlClient, JsonConvert.SerializeObject(ObjRequest), JsonConvert.SerializeObject(restBearer));
 
                 restBearer.Wait();
