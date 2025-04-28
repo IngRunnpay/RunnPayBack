@@ -237,6 +237,8 @@ namespace Bussines
                         if (ObjDataPayOut.IdEstado == (int)enumEstadoPayOut.PorDispersar)
                         {
                             int reps = await _DispersionRepository.DesicionDispersion(request);
+                            //int reps = request.IdDispersion;
+
                             if (reps > 0)
                             {
                                 if (!string.IsNullOrEmpty(ObjDataPayOut.NotifyUrl))

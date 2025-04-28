@@ -13,5 +13,6 @@ namespace Interfaces.DataAccess.Repository
         Task<BaseResponse> DashboarHistorial(int IdUsuario);
         Task<ResponseDashboardMont> PorcentajeMensual(int IdUsuario, DateTime FechaInicio, DateTime FechaFin);
         Task<BaseResponse> TransaccionesAño(int IdUsuario);
+        Task<BaseResponse> Contador(string IdAplicacion, DateTime fecha);
     }
 }

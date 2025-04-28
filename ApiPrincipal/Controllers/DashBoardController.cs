@@ -88,6 +88,28 @@ namespace ApiPrincipal.Controllers
             }
             return Ok(response);
         }
+        [HttpGet(RoutesPath.DashboardController_Contador)]
+        [TypeFilter(typeof(AllowAnonymousFilter))]
+        [ResponseCache(Duration = 15, Location = ResponseCacheLocation.Client)]
+        public async Task<ActionResult> Contador([FromQuery] string IdAplicacion, DateTime fecha)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                ValidateAccess(RoutesPath.DashboardController_Contador, new { });
+                response = await _DashBoardServices.Contador(IdAplicacion, fecha);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await LogError(ex);
+                response.CreateError(ex);
+            }
+            return Ok(response);
+        }
 
     }
 }

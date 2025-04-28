@@ -212,6 +212,7 @@ namespace DataAccess.Repository
             parameters.Add("@Documento", string.IsNullOrEmpty(request.Documento) ? null : request.Documento);
             parameters.Add("@FechaInicio", string.IsNullOrEmpty(request.FechaInicio) ? null : request.FechaInicio);
             parameters.Add("@FechaFin", string.IsNullOrEmpty(request.FechaFin) ? null : request.FechaFin);
+            parameters.Add("@IdEstado", request.IdEstado > 0 ? request.IdEstado : null);
 
             var result = await _helper.ExecuteStoreProcedureGet<object>(connectionString, storedProcedure, parameters);
             var response = new BaseResponse();

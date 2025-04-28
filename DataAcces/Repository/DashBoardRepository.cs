@@ -65,5 +65,19 @@ namespace DataAccess.Repository
 
             return response;
         }
+        public async Task<BaseResponse> Contador(string IdAplicacion, DateTime fecha)
+        {
+            string connectionString = _configuration.GetSection("ConnectionStrings:RunPayDbConnection").Value;
+            string storedProcedure = "[dbo].[Transaccion.Sp_GetContador]";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@IdAplicacion", IdAplicacion);
+            parameters.Add("@Fecha", fecha);
+
+            var result = await _helper.ExecuteStoreProcedureGet<object>(connectionString, storedProcedure, parameters);
+            var response = new BaseResponse();
+            response.CreateSuccess("Ok", result);
+
+            return response;
+        }
     }
 }

@@ -18,6 +18,8 @@ namespace Entities.Input.Reports
         public string? Documento { get; set; }
         public string? FechaInicio { get; set; }
         public string? FechaFin { get; set; }
+        public int? IdEstado { get; set; }
+
 
     }
 }

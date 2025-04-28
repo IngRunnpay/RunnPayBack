@@ -34,6 +34,8 @@
         public const string DashboardController_HistorialTransacciones = Base + "/" + DashboardController + "/HistorialTransacciones/";
         public const string DashboardController_PorcentajeMensual= Base + "/" + DashboardController + "/PorcentajeMensual/";
         public const string DashboardController_TransaccionesAño = Base + "/" + DashboardController + "/TransaccionesAño/";
+        public const string DashboardController_Contador = Base + "/" + DashboardController + "/Contador/";
+
         #endregion
 
         #region UserPortalController

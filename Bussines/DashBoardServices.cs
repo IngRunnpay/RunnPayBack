@@ -103,5 +103,24 @@ namespace Bussines
             }
             return response;
         }
+        public async Task<BaseResponse> Contador(string IdAplicacion, DateTime fecha)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                var resp = await _dashboardRepository.Contador(IdAplicacion, fecha);
+                response.CreateSuccess("OK", resp.Data);
+            }
+            catch (CustomException ex)
+            {
+                response.CreateError(ex);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.Logger(new LogIn(ex));
+                response.CreateError(ex);
+            }
+            return response;
+        }
     }
 }
